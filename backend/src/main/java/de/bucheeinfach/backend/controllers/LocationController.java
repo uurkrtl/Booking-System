@@ -32,4 +32,9 @@ public class LocationController {
     LocationCreatedResponse addLocation(@Valid @RequestBody LocationRequest locationRequest){
         return locationService.addLocation(locationRequest);
     }
+
+    @PutMapping("/{id}")
+    LocationCreatedResponse updateLocation(@PathVariable String id, @Valid @RequestBody LocationRequest locationRequest) {
+        return locationService.updateLocation(id, locationRequest);
+    }
 }

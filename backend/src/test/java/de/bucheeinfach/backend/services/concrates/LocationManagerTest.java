@@ -112,4 +112,42 @@ class LocationManagerTest {
         assertEquals(expectedResponse.getId(), actualResponse.getId());
     }
 
+    @Test
+    void updateLocation_whenRequestIsValid_returnLocationCreatedResponse() {
+        String id = "1";
+        LocationRequest locationRequest = LocationRequest.builder()
+                .name("Updated Program")
+                .address("Updated Address")
+                .build();
+
+        LocationCreatedResponse expectedResponse = LocationCreatedResponse.builder()
+                .id(id)
+                .name("Updated Program")
+                .address("Updated Address")
+                .build();
+
+        Location location = Location.builder()
+                .id(id)
+                .name("Updated Program")
+                .address("Updated Address")
+                .build();
+
+        // WHEN
+        when(idService.generateProgramId()).thenReturn(id);
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapper.map(locationRequest, Location.class)).thenReturn(location);
+        when(modelMapper.map(location, LocationCreatedResponse.class)).thenReturn(expectedResponse);
+        when(locationRepository.findById(id)).thenReturn(Optional.of(location));
+        when(locationRepository.save(location)).thenReturn(location);
+
+        LocationCreatedResponse actualResponse = locationManager.updateLocation(id, locationRequest);
+
+        // THEN
+        verify(locationBusinessRule, times(1)).checkIfLocationNameExists(locationRequest.getName(), location);
+        verify(locationRepository, times(1)).save(location);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+        assertEquals(expectedResponse.getAddress(), actualResponse.getAddress());
+    }
+
 }

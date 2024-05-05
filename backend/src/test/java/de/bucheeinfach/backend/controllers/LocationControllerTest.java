@@ -115,4 +115,83 @@ class LocationControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
+    @Test
+    void updateLocation_whenRequestIsValid_returnLocationCreatedResponse() throws Exception {
+        // GIVEN
+        LocationRequest locationRequest = LocationRequest.builder()
+                .name("Test Location")
+                .address("Test Address")
+                .build();
+
+        String id = locationService.addLocation(locationRequest).getId();
+
+        LocationRequest updateLocationRequest = LocationRequest.builder()
+                .name("Update Location")
+                .address("Update Address")
+                .build();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/locations/" + id)
+                        .content(objectMapper.writeValueAsString(updateLocationRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Update Location"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.address").value("Update Address"));
+
+    }
+
+    @Test
+    void updateProgram_whenProgramNameNotChanged_returnProgramCreatedResponse() throws Exception {
+        // GIVEN
+        LocationRequest locationRequest = LocationRequest.builder()
+                .name("Test Location")
+                .address("Test Address")
+                .build();
+
+        String id = locationService.addLocation(locationRequest).getId();
+
+        LocationRequest updateLocationRequest = LocationRequest.builder()
+                .name("Test Location")
+                .address("Update Address")
+                .build();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/locations/" + id)
+                        .content(objectMapper.writeValueAsString(updateLocationRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("Test Location"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.address").value("Update Address"));
+
+    }
+
+    @Test
+    void updateLocation_whenLocationNameExists_throwsConflict() throws Exception {
+        // GIVEN
+        LocationRequest locationRequest = LocationRequest.builder()
+                .name("Test Location")
+                .address("Test Address")
+                .build();
+
+        String id = locationService.addLocation(locationRequest).getId();
+
+        locationService.addLocation(LocationRequest.builder().name("Exists Name").address("Test").build());
+
+        LocationRequest updateLocationRequest = LocationRequest.builder()
+                .name("Exists Name")
+                .address("Update Address")
+                .build();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/locations/" + id)
+                        .content(objectMapper.writeValueAsString(updateLocationRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isConflict());
+    }
+
 }
