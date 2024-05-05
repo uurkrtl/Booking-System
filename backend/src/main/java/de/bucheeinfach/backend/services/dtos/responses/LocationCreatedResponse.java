@@ -15,10 +15,10 @@ public class LocationCreatedResponse {
     private String id;
     private String name;
     private String address;
-    private String phone;
     private String email;
-    private String mapUrl;
+    private String phone;
     private String contactPerson;
+    private String mapUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean status;
