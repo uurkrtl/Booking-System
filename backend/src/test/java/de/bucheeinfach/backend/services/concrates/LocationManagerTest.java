@@ -1,5 +1,6 @@
 package de.bucheeinfach.backend.services.concrates;
 
+import de.bucheeinfach.backend.core.exceptions.types.RecordNotFoundException;
 import de.bucheeinfach.backend.core.mappers.ModelMapperService;
 import de.bucheeinfach.backend.models.Location;
 import de.bucheeinfach.backend.repositories.LocationRepository;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -59,6 +61,32 @@ class LocationManagerTest {
 
         // THEN
         assertEquals(2, actual.size());
+    }
+
+    @Test
+    void getLocationById_whenLocationExists_returnProgram() {
+        // GIVEN
+        Location location = Location.builder().id("1").build();
+        LocationCreatedResponse expectedResponse = LocationCreatedResponse.builder().id("1").build();
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(locationRepository.findById("1")).thenReturn(Optional.of(location));
+        when(modelMapper.map(location, LocationCreatedResponse.class)).thenReturn(expectedResponse);
+
+        LocationCreatedResponse actualResponse = locationManager.getLocationById("1");
+
+        //THEN
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void getLocationById_whenLocationNotExists_throwsRecordNotFoundException() {
+        // WHEN
+        when(locationRepository.findById("2")).thenReturn(Optional.empty());
+
+        //THEN
+        assertThrows(RecordNotFoundException.class, () -> locationManager.getLocationById("2"));
     }
 
     @Test

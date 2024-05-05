@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface LocationService {
     List<LocationGetAllResponse> getAllLocations();
+    LocationCreatedResponse getLocationById(String id);
     LocationCreatedResponse addLocation(LocationRequest locationRequest);
 }
