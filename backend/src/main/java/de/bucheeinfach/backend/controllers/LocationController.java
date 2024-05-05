@@ -22,6 +22,11 @@ public class LocationController {
         return locationService.getAllLocations();
     }
 
+    @GetMapping("/{id}")
+    LocationCreatedResponse getLocationById(@PathVariable String id) {
+        return locationService.getLocationById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     LocationCreatedResponse addLocation(@Valid @RequestBody LocationRequest locationRequest){

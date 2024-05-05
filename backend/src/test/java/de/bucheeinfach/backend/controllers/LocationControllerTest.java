@@ -36,6 +36,35 @@ class LocationControllerTest {
     }
 
     @Test
+    void getLocationById_whenLocationExists_returnProgram() throws Exception {
+        // GIVEN
+        LocationRequest locationRequest = LocationRequest.builder()
+                .name("Test Program")
+                .address("Test Address")
+                .build();
+        String id = locationService.addLocation(locationRequest).getId();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/locations/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+    }
+
+    @Test
+    void getLocationById_whenLocationNotExists_throwsRecordNotFoundException() throws Exception {
+        // GIVEN
+        String id = "non-existing-id";
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/locations/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
     void addLocation_whenRequestIsValid_returnLocationCreatedResponse() throws Exception {
         // GIVEN
         LocationRequest locationRequest = LocationRequest.builder()
