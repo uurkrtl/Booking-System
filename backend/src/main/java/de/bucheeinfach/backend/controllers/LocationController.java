@@ -37,4 +37,9 @@ public class LocationController {
     LocationCreatedResponse updateLocation(@PathVariable String id, @Valid @RequestBody LocationRequest locationRequest) {
         return locationService.updateLocation(id, locationRequest);
     }
+
+    @PutMapping("/status/{id}")
+    LocationCreatedResponse changeLocationStatus(@PathVariable String id, @RequestParam boolean status) {
+        return locationService.changeLocationStatus(id, status);
+    }
 }

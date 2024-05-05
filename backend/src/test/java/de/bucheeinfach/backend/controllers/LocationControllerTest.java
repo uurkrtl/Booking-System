@@ -194,4 +194,23 @@ class LocationControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isConflict());
     }
 
+    @Test
+    void changeLocationStatus_whenLocationExists_returnLocation() throws Exception {
+        // GIVEN
+        LocationRequest locationRequest = LocationRequest.builder()
+                .name("Test Location")
+                .address("Test Address")
+                .build();
+
+        String id = locationService.addLocation(locationRequest).getId();
+        boolean newStatus = false;
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/locations/status/" + id)
+                        .param("status", String.valueOf(newStatus))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(newStatus));
+    }
 }

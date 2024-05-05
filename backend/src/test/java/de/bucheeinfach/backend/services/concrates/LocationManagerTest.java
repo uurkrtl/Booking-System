@@ -150,4 +150,31 @@ class LocationManagerTest {
         assertEquals(expectedResponse.getAddress(), actualResponse.getAddress());
     }
 
+    @Test
+    void changeLocationStatus_whenLocationExists_returnLocation() {
+        // GIVEN
+        String id = "1";
+
+        Location location = Location.builder()
+                .id(id)
+                .status(true)
+                .build();
+
+        LocationCreatedResponse expectedResponse = LocationCreatedResponse.builder()
+                .id(id)
+                .status(true)
+                .build();
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(location, LocationCreatedResponse.class)).thenReturn(expectedResponse);
+        when(locationRepository.findById(id)).thenReturn(Optional.of(location));
+        when(locationRepository.save(location)).thenReturn(location);
+
+        LocationCreatedResponse actualResponse = locationManager.changeLocationStatus(id, true);
+
+        // THEN
+        verify(locationRepository, times(1)).save(location);
+        assertEquals(expectedResponse.isStatus(), actualResponse.isStatus());
+    }
 }
