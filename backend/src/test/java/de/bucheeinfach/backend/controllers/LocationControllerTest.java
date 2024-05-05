@@ -26,6 +26,16 @@ class LocationControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    void getAllLocations_returnListOfProgram() throws Exception {
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/locations")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
     void addLocation_whenRequestIsValid_returnLocationCreatedResponse() throws Exception {
         // GIVEN
         LocationRequest locationRequest = LocationRequest.builder()

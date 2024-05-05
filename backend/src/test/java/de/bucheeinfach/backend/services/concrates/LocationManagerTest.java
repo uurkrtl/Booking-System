@@ -6,6 +6,7 @@ import de.bucheeinfach.backend.repositories.LocationRepository;
 import de.bucheeinfach.backend.services.abstracts.IdService;
 import de.bucheeinfach.backend.services.dtos.requests.LocationRequest;
 import de.bucheeinfach.backend.services.dtos.responses.LocationCreatedResponse;
+import de.bucheeinfach.backend.services.dtos.responses.LocationGetAllResponse;
 import de.bucheeinfach.backend.services.rules.LocationBusinessRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -39,6 +42,23 @@ class LocationManagerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void getAllLocations_returnListOfLocation() {
+        // GIVEN
+        List<Location> locations = List.of(
+                Location.builder().id("1").build(),
+                Location.builder().id("1").build());
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(locationRepository.findAll()).thenReturn(locations);
+
+        List<LocationGetAllResponse> actual = locationManager.getAllLocations();
+
+        // THEN
+        assertEquals(2, actual.size());
     }
 
     @Test
