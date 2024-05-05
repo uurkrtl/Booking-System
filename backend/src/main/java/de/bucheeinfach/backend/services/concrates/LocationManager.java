@@ -60,4 +60,13 @@ public class LocationManager implements LocationService {
         updatedLocation = locationRepository.save(updatedLocation);
         return modelMapperService.forResponse().map(updatedLocation, LocationCreatedResponse.class);
     }
+
+    @Override
+    public LocationCreatedResponse changeLocationStatus(String id, boolean status) {
+        Location location = locationRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(LocationMessage.LOCATION_NOT_FOUND));
+        location.setStatus(status);
+        location.setUpdatedAt(LocalDateTime.now());
+        location = locationRepository.save(location);
+        return modelMapperService.forResponse().map(location, LocationCreatedResponse.class);
+    }
 }

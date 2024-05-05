@@ -11,4 +11,5 @@ public interface LocationService {
     LocationCreatedResponse getLocationById(String id);
     LocationCreatedResponse addLocation(LocationRequest locationRequest);
     LocationCreatedResponse updateLocation(String id, LocationRequest locationRequest);
+    LocationCreatedResponse changeLocationStatus(String id, boolean status);
 }
