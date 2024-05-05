@@ -11,4 +11,9 @@ public class IdManager implements IdService {
     public String generateProgramId() {
         return "PRG-" + UUID.randomUUID();
     }
+
+    @Override
+    public String generateLocationId() {
+        return "LOC-" + UUID.randomUUID();
+    }
 }

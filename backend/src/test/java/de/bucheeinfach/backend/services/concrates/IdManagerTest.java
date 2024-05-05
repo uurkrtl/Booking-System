@@ -34,4 +34,23 @@ class IdManagerTest {
         // THEN
         assertTrue(generatedId.startsWith("PRG-"));
     }
+
+    @Test
+    void generateLocationId_returnUniqueId() {
+        // GIVEN
+        String id1 = idManager.generateLocationId();
+        String id2 = idManager.generateLocationId();
+
+        // THEN
+        assertNotEquals(id1, id2);
+    }
+
+    @Test
+    void generateLocationId_returnsIdWithCorrectPrefix() {
+        // GIVEN
+        String generatedId = idManager.generateLocationId();
+
+        // THEN
+        assertTrue(generatedId.startsWith("LOC-"));
+    }
 }
