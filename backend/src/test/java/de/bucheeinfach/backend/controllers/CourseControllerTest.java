@@ -33,6 +33,16 @@ class CourseControllerTest {
     private MockMvc mockMvc;
 
     @Test
+    void getAllCourses_returnListOfCourses() throws Exception {
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/courses")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
     void addCourse_whenRequestIsValid_returnCourseCreatedResponse() throws Exception {
         // GIVEN
         String locationId = locationService.addLocation(LocationRequest.builder().name("Test").address("Test Address").build()).getId();

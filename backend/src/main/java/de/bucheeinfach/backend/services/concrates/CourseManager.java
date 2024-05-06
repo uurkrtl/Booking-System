@@ -13,12 +13,14 @@ import de.bucheeinfach.backend.services.abstracts.CourseService;
 import de.bucheeinfach.backend.services.abstracts.IdService;
 import de.bucheeinfach.backend.services.dtos.requests.CourseRequest;
 import de.bucheeinfach.backend.services.dtos.responses.CourseCreatedResponse;
+import de.bucheeinfach.backend.services.dtos.responses.CourseGetAllResponse;
 import de.bucheeinfach.backend.services.messages.LocationMessage;
 import de.bucheeinfach.backend.services.messages.ProgramMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +30,12 @@ public class CourseManager implements CourseService {
     private final LocationRepository locationRepository;
     private final IdService idService;
     private final ModelMapperService modelMapperService;
+
+    @Override
+    public List<CourseGetAllResponse> getAllCourses() {
+        List<Course> courses = courseRepository.findAll();
+        return courses.stream().map(course -> modelMapperService.forResponse().map(course, CourseGetAllResponse.class)).toList();
+    }
 
     @Override
     public CourseCreatedResponse addCourse(CourseRequest courseRequest) {
