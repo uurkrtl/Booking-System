@@ -1,6 +1,7 @@
 package de.bucheeinfach.backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bucheeinfach.backend.services.abstracts.CourseService;
 import de.bucheeinfach.backend.services.abstracts.LocationService;
 import de.bucheeinfach.backend.services.abstracts.ProgramService;
 import de.bucheeinfach.backend.services.dtos.requests.CourseRequest;
@@ -24,6 +25,9 @@ class CourseControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
+    private CourseService courseService;
+
+    @Autowired
     private LocationService locationService;
 
     @Autowired
@@ -40,6 +44,37 @@ class CourseControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
+
+    @Test
+    void getCourseById_whenCourseExists_returnCourse() throws Exception {
+        // GIVEN
+        String locationId = locationService.addLocation(LocationRequest.builder().name("Test").address("Test Address").build()).getId();
+        String programId = programService.addProgram(ProgramRequest.builder().name("Test").description("Test Description").build()).getId();
+        CourseRequest courseRequest = CourseRequest.builder()
+                .locationId(locationId)
+                .programId(programId)
+                .build();
+        String id = courseService.addCourse(courseRequest).getId();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/courses/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id));
+    }
+
+    @Test
+    void getCourseById_whenCourseNotExists_throwsRecordNotFoundException() throws Exception {
+        // GIVEN
+        String id = "non-existing-id";
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/courses/" + id)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
     @Test

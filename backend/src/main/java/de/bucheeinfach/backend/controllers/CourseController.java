@@ -21,6 +21,11 @@ public class CourseController {
         return courseService.getAllCourses();
     }
 
+    @GetMapping("/{id}")
+    CourseCreatedResponse getCourseById(@PathVariable String id) {
+        return courseService.getCourseById(id);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     CourseCreatedResponse addCourse(@RequestBody CourseRequest courseRequest) {

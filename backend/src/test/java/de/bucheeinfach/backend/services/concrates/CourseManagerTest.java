@@ -1,5 +1,6 @@
 package de.bucheeinfach.backend.services.concrates;
 
+import de.bucheeinfach.backend.core.exceptions.types.RecordNotFoundException;
 import de.bucheeinfach.backend.core.mappers.ModelMapperService;
 import de.bucheeinfach.backend.models.Course;
 import de.bucheeinfach.backend.models.Location;
@@ -67,6 +68,32 @@ class CourseManagerTest {
         // THEN
         assertEquals(expectedCourses.size(), actualResponse.size());
 
+    }
+
+    @Test
+    void getCourseById_whenCourseExists_returnCourse() {
+        // GIVEN
+        Course course = Course.builder().id("1").build();
+        CourseCreatedResponse expectedResponse = CourseCreatedResponse.builder().id("1").build();
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(courseRepository.findById("1")).thenReturn(Optional.of(course));
+        when(modelMapper.map(course, CourseCreatedResponse.class)).thenReturn(expectedResponse);
+
+        CourseCreatedResponse actualResponse = courseManager.getCourseById("1");
+
+        //THEN
+        assertEquals(expectedResponse, actualResponse);
+    }
+
+    @Test
+    void getCourseById_whenCourseNotExists_throwsRecordNotFoundException() {
+        // WHEN
+        when(courseRepository.findById("2")).thenReturn(Optional.empty());
+
+        //THEN
+        assertThrows(RecordNotFoundException.class, () -> courseManager.getCourseById("2"));
     }
 
     @Test

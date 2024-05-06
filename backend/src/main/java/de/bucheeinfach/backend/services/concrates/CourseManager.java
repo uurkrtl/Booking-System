@@ -14,6 +14,7 @@ import de.bucheeinfach.backend.services.abstracts.IdService;
 import de.bucheeinfach.backend.services.dtos.requests.CourseRequest;
 import de.bucheeinfach.backend.services.dtos.responses.CourseCreatedResponse;
 import de.bucheeinfach.backend.services.dtos.responses.CourseGetAllResponse;
+import de.bucheeinfach.backend.services.messages.CourseMessage;
 import de.bucheeinfach.backend.services.messages.LocationMessage;
 import de.bucheeinfach.backend.services.messages.ProgramMessage;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,12 @@ public class CourseManager implements CourseService {
     public List<CourseGetAllResponse> getAllCourses() {
         List<Course> courses = courseRepository.findAll();
         return courses.stream().map(course -> modelMapperService.forResponse().map(course, CourseGetAllResponse.class)).toList();
+    }
+
+    @Override
+    public CourseCreatedResponse getCourseById(String id) {
+        Course course = courseRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(CourseMessage.COURSE_NOT_FOUND));
+        return modelMapperService.forResponse().map(course, CourseCreatedResponse.class);
     }
 
     @Override
