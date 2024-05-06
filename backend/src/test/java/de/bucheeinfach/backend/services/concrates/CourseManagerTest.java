@@ -10,6 +10,7 @@ import de.bucheeinfach.backend.repositories.ProgramRepository;
 import de.bucheeinfach.backend.services.abstracts.IdService;
 import de.bucheeinfach.backend.services.dtos.requests.CourseRequest;
 import de.bucheeinfach.backend.services.dtos.responses.CourseCreatedResponse;
+import de.bucheeinfach.backend.services.dtos.responses.CourseGetAllResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -47,6 +49,24 @@ class CourseManagerTest {
     public void setup() {
         MockitoAnnotations.openMocks(this);
         modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void getAllCourses_returnListOfCourses() {
+        // GIVEN
+        List<Course> expectedCourses = List.of(
+                Course.builder().build(),
+                Course.builder().build());
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(courseRepository.findAll()).thenReturn(expectedCourses);
+
+        List<CourseGetAllResponse> actualResponse = courseManager.getAllCourses();
+
+        // THEN
+        assertEquals(expectedCourses.size(), actualResponse.size());
+
     }
 
     @Test
