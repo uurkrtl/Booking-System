@@ -1,0 +1,78 @@
+package de.bucheeinfach.backend.services.concrates;
+
+import de.bucheeinfach.backend.core.mappers.ModelMapperService;
+import de.bucheeinfach.backend.models.Course;
+import de.bucheeinfach.backend.models.Location;
+import de.bucheeinfach.backend.models.Program;
+import de.bucheeinfach.backend.repositories.CourseRepository;
+import de.bucheeinfach.backend.repositories.LocationRepository;
+import de.bucheeinfach.backend.repositories.ProgramRepository;
+import de.bucheeinfach.backend.services.abstracts.IdService;
+import de.bucheeinfach.backend.services.dtos.requests.CourseRequest;
+import de.bucheeinfach.backend.services.dtos.responses.CourseCreatedResponse;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.modelmapper.ModelMapper;
+
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+
+class CourseManagerTest {
+    @InjectMocks
+    private CourseManager courseManager;
+    private ModelMapper modelMapper;
+
+    @Mock
+    private CourseRepository courseRepository;
+
+    @Mock
+    private ProgramRepository programRepository;
+
+    @Mock
+    private LocationRepository locationRepository;
+
+    @Mock
+    private ModelMapperService modelMapperService;
+
+    @Mock
+    private IdService idService;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.openMocks(this);
+        modelMapper = mock(ModelMapper.class);
+    }
+
+    @Test
+    void addCourse_whenRequestIsValid_returnCourseCreatedResponse() {
+        // GIVEN
+        Location location = Location.builder().id("1").build();
+        Program program = Program.builder().id("1").build();
+        CourseRequest courseRequest = CourseRequest.builder().locationId("1").programId("1").build();
+        CourseCreatedResponse expectedResponse = CourseCreatedResponse.builder().build();
+        Course course = Course.builder().program(program).location(location).build();
+
+        // WHEN
+        when(idService.generateCourseId()).thenReturn("1");
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapper.map(courseRequest, Course.class)).thenReturn(course);
+        when(modelMapper.map(course, CourseCreatedResponse.class)).thenReturn(expectedResponse);
+        when(courseRepository.save(course)).thenReturn(course);
+        when(programRepository.findById("1")).thenReturn(Optional.of(program));
+        when(locationRepository.findById("1")).thenReturn(Optional.of(location));
+
+        CourseCreatedResponse actualResponse = courseManager.addCourse(courseRequest);
+
+        // THEN
+        verify(courseRepository, times(1)).save(course);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+    }
+
+}

@@ -16,4 +16,9 @@ public class IdManager implements IdService {
     public String generateLocationId() {
         return "LOC-" + UUID.randomUUID();
     }
+
+    @Override
+    public String generateCourseId() {
+        return "CRS-" + UUID.randomUUID();
+    }
 }
