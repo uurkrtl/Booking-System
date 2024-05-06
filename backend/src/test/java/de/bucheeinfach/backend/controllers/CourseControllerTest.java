@@ -1,6 +1,7 @@
 package de.bucheeinfach.backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.bucheeinfach.backend.models.enums.CourseStatus;
 import de.bucheeinfach.backend.services.abstracts.CourseService;
 import de.bucheeinfach.backend.services.abstracts.LocationService;
 import de.bucheeinfach.backend.services.abstracts.ProgramService;
@@ -152,4 +153,60 @@ class CourseControllerTest {
 
     }
 
+    @Test
+    void changeCourseStatus_whenLocationExists_returnLocation() throws Exception {
+        // GIVEN
+        String locationId = locationService.addLocation(LocationRequest.builder().name("Test Location").address("Test Address").build()).getId();
+        String programId = programService.addProgram(ProgramRequest.builder().name("Test Program").description("Test Description").build()).getId();
+        CourseRequest courseRequest = CourseRequest.builder()
+                .locationId(locationId)
+                .programId(programId)
+                .build();
+
+        String id = courseService.addCourse(courseRequest).getId();
+        String newStatus = CourseStatus.CANCELLED.name();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/courses/status/" + id)
+                        .param("status", newStatus)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(newStatus));
+    }
+
+    @Test
+    void changeCourseStatus_whenCourseNotExists_throwsRecordNotFoundException() throws Exception {
+        // GIVEN
+        String id = "non-exist-id";
+        String newStatus = CourseStatus.CANCELLED.name();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/courses/status/" + id)
+                        .param("status", newStatus)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void changeCourseStatus_whenStatusIsInvalid_shouldThrowIllegalArgumentException() throws Exception {
+        // GIVEN
+        String locationId = locationService.addLocation(LocationRequest.builder().name("Test Location").address("Test Address").build()).getId();
+        String programId = programService.addProgram(ProgramRequest.builder().name("Test Program").description("Test Description").build()).getId();
+        CourseRequest courseRequest = CourseRequest.builder()
+                .locationId(locationId)
+                .programId(programId)
+                .build();
+
+        String id = courseService.addCourse(courseRequest).getId();
+        String newStatus = "INVALID_STATUS";
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/courses/status/" + id)
+                        .param("status", newStatus)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
 }

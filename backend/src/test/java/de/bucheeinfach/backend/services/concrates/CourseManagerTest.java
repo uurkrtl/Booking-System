@@ -5,6 +5,7 @@ import de.bucheeinfach.backend.core.mappers.ModelMapperService;
 import de.bucheeinfach.backend.models.Course;
 import de.bucheeinfach.backend.models.Location;
 import de.bucheeinfach.backend.models.Program;
+import de.bucheeinfach.backend.models.enums.CourseStatus;
 import de.bucheeinfach.backend.repositories.CourseRepository;
 import de.bucheeinfach.backend.repositories.LocationRepository;
 import de.bucheeinfach.backend.repositories.ProgramRepository;
@@ -12,7 +13,9 @@ import de.bucheeinfach.backend.services.abstracts.IdService;
 import de.bucheeinfach.backend.services.dtos.requests.CourseRequest;
 import de.bucheeinfach.backend.services.dtos.responses.CourseCreatedResponse;
 import de.bucheeinfach.backend.services.dtos.responses.CourseGetAllResponse;
+import de.bucheeinfach.backend.services.rules.CourseBusinessRule;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -42,6 +45,9 @@ class CourseManagerTest {
 
     @Mock
     private ModelMapperService modelMapperService;
+
+    @Mock
+    private CourseBusinessRule courseBusinessRule;
 
     @Mock
     private IdService idService;
@@ -149,4 +155,47 @@ class CourseManagerTest {
         assertEquals(expectedResponse.getQuota(), actualResponse.getQuota());
     }
 
+    @Test
+    void changeCourseStatus_whenCourseExists_returnCourse() {
+        // GIVEN
+        String id = "1";
+        Course course = Course.builder().id(id).status(CourseStatus.ACTIVE).build();
+        CourseCreatedResponse expectedResponse = CourseCreatedResponse.builder().id(id).status(CourseStatus.COMPLETED).build();
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapper.map(course, CourseCreatedResponse.class)).thenReturn(expectedResponse);
+        when(courseRepository.findById(id)).thenReturn(Optional.of(course));
+        when(courseRepository.save(course)).thenReturn(course);
+
+        CourseCreatedResponse actualResponse = courseManager.changeCourseStatus(id, CourseStatus.COMPLETED.name());
+
+        // THEN
+        verify(courseBusinessRule, times(1)).checkIfStatusNameExists(CourseStatus.COMPLETED.name());
+        verify(courseRepository, times(1)).save(course);
+        assertEquals(expectedResponse.getStatus(), actualResponse.getStatus());
+    }
+
+    @Test
+    void changeCourseStatus_whenCourseNotExists_throwsRecordNotFoundException() {
+        // WHEN
+        when(courseRepository.findById("2")).thenReturn(Optional.empty());
+
+        //THEN
+        assertThrows(RecordNotFoundException.class, () -> courseManager.changeCourseStatus("2", "COMPLETED"));
+    }
+
+    @Test
+    @DisplayName("Should throw IllegalArgumentException when status is invalid")
+    void changeCourseStatus_whenStatusIsInvalid_shouldThrowIllegalArgumentException() {
+        // GIVEN
+        String id = "1";
+        Course course = Course.builder().id(id).status(CourseStatus.ACTIVE).build();
+
+        // WHEN
+        when(courseRepository.findById(id)).thenReturn(Optional.of(course));
+
+        // THEN
+        assertThrows(IllegalArgumentException.class, () -> courseManager.changeCourseStatus("1", "INVALID_STATUS"));
+    }
 }

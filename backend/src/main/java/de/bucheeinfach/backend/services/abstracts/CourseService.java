@@ -11,4 +11,5 @@ public interface CourseService {
     CourseCreatedResponse getCourseById(String id);
     CourseCreatedResponse addCourse(CourseRequest courseRequest);
     CourseCreatedResponse updateCourse(String id, CourseRequest courseRequest);
+    CourseCreatedResponse changeCourseStatus(String id, String status);
 }

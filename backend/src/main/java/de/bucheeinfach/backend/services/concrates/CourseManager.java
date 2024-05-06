@@ -17,6 +17,7 @@ import de.bucheeinfach.backend.services.dtos.responses.CourseGetAllResponse;
 import de.bucheeinfach.backend.services.messages.CourseMessage;
 import de.bucheeinfach.backend.services.messages.LocationMessage;
 import de.bucheeinfach.backend.services.messages.ProgramMessage;
+import de.bucheeinfach.backend.services.rules.CourseBusinessRule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,7 @@ public class CourseManager implements CourseService {
     private final LocationRepository locationRepository;
     private final IdService idService;
     private final ModelMapperService modelMapperService;
+    private final CourseBusinessRule courseBusinessRule;
 
     @Override
     public List<CourseGetAllResponse> getAllCourses() {
@@ -72,5 +74,14 @@ public class CourseManager implements CourseService {
         updatedCourse.setUpdatedAt(LocalDateTime.now());
         updatedCourse = courseRepository.save(updatedCourse);
         return modelMapperService.forResponse().map(updatedCourse, CourseCreatedResponse.class);
+    }
+
+    @Override
+    public CourseCreatedResponse changeCourseStatus(String id, String status) {
+        courseBusinessRule.checkIfStatusNameExists(status);
+        Course course = courseRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(CourseMessage.COURSE_NOT_FOUND));
+        course.setStatus(CourseStatus.valueOf(status));
+        course = courseRepository.save(course);
+        return modelMapperService.forResponse().map(course, CourseCreatedResponse.class);
     }
 }

@@ -36,4 +36,9 @@ public class CourseController {
     CourseCreatedResponse updateCourse(@PathVariable String id, @RequestBody CourseRequest courseRequest) {
         return courseService.updateCourse(id, courseRequest);
     }
+
+    @PutMapping("/status/{id}")
+    CourseCreatedResponse changeCourseStatus(@PathVariable String id, @RequestParam String status) {
+        return courseService.changeCourseStatus(id, status);
+    }
 }
