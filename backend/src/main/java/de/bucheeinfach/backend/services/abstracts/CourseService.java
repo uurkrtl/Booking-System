@@ -10,4 +10,5 @@ public interface CourseService {
     List<CourseGetAllResponse> getAllCourses();
     CourseCreatedResponse getCourseById(String id);
     CourseCreatedResponse addCourse(CourseRequest courseRequest);
+    CourseCreatedResponse updateCourse(String id, CourseRequest courseRequest);
 }

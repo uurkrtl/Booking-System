@@ -122,4 +122,31 @@ class CourseManagerTest {
         assertEquals(expectedResponse.getId(), actualResponse.getId());
     }
 
+    @Test
+    void updateCourse_whenRequestIsValid_returnCourseCreatedResponse() {
+        String id = "1";
+        Location location = Location.builder().id(id).build();
+        Program program = Program.builder().id(id).build();
+        CourseRequest courseRequest = CourseRequest.builder().locationId(id).programId(id).quota(5).build();
+        CourseCreatedResponse expectedResponse = CourseCreatedResponse.builder().locationId(id).programId(id).id(id).quota(5).build();
+        Course course = Course.builder().location(location).program(program).quota(5).build();
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(modelMapperService.forRequest()).thenReturn(modelMapper);
+        when(modelMapper.map(courseRequest, Course.class)).thenReturn(course);
+        when(modelMapper.map(course, CourseCreatedResponse.class)).thenReturn(expectedResponse);
+        when(courseRepository.findById(id)).thenReturn(Optional.of(course));
+        when(courseRepository.save(course)).thenReturn(course);
+        when(programRepository.findById("1")).thenReturn(Optional.of(program));
+        when(locationRepository.findById("1")).thenReturn(Optional.of(location));
+
+        CourseCreatedResponse actualResponse = courseManager.updateCourse(id, courseRequest);
+
+        // THEN
+        verify(courseRepository, times(1)).save(course);
+        assertEquals(expectedResponse.getId(), actualResponse.getId());
+        assertEquals(expectedResponse.getQuota(), actualResponse.getQuota());
+    }
+
 }

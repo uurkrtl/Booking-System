@@ -57,4 +57,20 @@ public class CourseManager implements CourseService {
         course = courseRepository.save(course);
         return modelMapperService.forResponse().map(course, CourseCreatedResponse.class);
     }
+
+    @Override
+    public CourseCreatedResponse updateCourse(String id, CourseRequest courseRequest) {
+        Course updatedCourse = modelMapperService.forRequest().map(courseRequest, Course.class);
+        Course selectedCourse = courseRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(CourseMessage.COURSE_NOT_FOUND));
+        Location selectedLocation = locationRepository.findById(courseRequest.getLocationId()).orElseThrow(() -> new RecordNotFoundException(LocationMessage.LOCATION_NOT_FOUND));
+        Program selectedProgram = programRepository.findById(courseRequest.getProgramId()).orElseThrow(() -> new RecordNotFoundException(ProgramMessage.PROGRAM_NOT_FOUND));
+        updatedCourse.setId(id);
+        updatedCourse.setLocation(selectedLocation);
+        updatedCourse.setProgram(selectedProgram);
+        updatedCourse.setCreatedAt(selectedCourse.getCreatedAt());
+        updatedCourse.setStatus(selectedCourse.getStatus());
+        updatedCourse.setUpdatedAt(LocalDateTime.now());
+        updatedCourse = courseRepository.save(updatedCourse);
+        return modelMapperService.forResponse().map(updatedCourse, CourseCreatedResponse.class);
+    }
 }

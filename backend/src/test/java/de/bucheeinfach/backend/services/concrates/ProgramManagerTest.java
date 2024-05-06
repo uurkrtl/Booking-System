@@ -146,7 +146,6 @@ class ProgramManagerTest {
                 .build();
 
         // WHEN
-        when(idService.generateProgramId()).thenReturn(id);
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
         when(modelMapperService.forRequest()).thenReturn(modelMapper);
         when(modelMapper.map(programRequest, Program.class)).thenReturn(program);
