@@ -31,4 +31,9 @@ public class CourseController {
     CourseCreatedResponse addCourse(@RequestBody CourseRequest courseRequest) {
         return courseService.addCourse(courseRequest);
     }
+
+    @PutMapping("/{id}")
+    CourseCreatedResponse updateCourse(@PathVariable String id, @RequestBody CourseRequest courseRequest) {
+        return courseService.updateCourse(id, courseRequest);
+    }
 }

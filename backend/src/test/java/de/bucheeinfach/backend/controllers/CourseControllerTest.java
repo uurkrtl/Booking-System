@@ -96,4 +96,60 @@ class CourseControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
 
+    @Test
+    void updateCourse_whenRequestIsValid_returnCourseCreatedResponse() throws Exception {
+        // GIVEN
+        String locationId = locationService.addLocation(LocationRequest.builder().name("Test Location").address("Test Address").build()).getId();
+        String updatedLocationId = locationService.addLocation(LocationRequest.builder().name("Update Location").address("Update Address").build()).getId();
+        String programId = programService.addProgram(ProgramRequest.builder().name("Test Program").description("Test Description").build()).getId();
+        CourseRequest courseRequest = CourseRequest.builder()
+                .locationId(locationId)
+                .programId(programId)
+                .build();
+
+        String id = courseService.addCourse(courseRequest).getId();
+
+        CourseRequest updateCourseRequest = CourseRequest.builder()
+                .locationId(updatedLocationId)
+                .programId(programId)
+                .build();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/courses/" + id)
+                        .content(objectMapper.writeValueAsString(updateCourseRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.locationName").value("Update Location"))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.programName").value("Test Program"));
+
+    }
+
+    @Test
+    void updateCourse_whenLocationIdDoesNotExists_throwsNotFound() throws Exception {
+        // GIVEN
+        String locationId = locationService.addLocation(LocationRequest.builder().name("Test Location").address("Test Address").build()).getId();
+        String programId = programService.addProgram(ProgramRequest.builder().name("Test Program").description("Test Description").build()).getId();
+        CourseRequest courseRequest = CourseRequest.builder()
+                .locationId(locationId)
+                .programId(programId)
+                .build();
+
+        String id = courseService.addCourse(courseRequest).getId();
+
+        CourseRequest updateCourseRequest = CourseRequest.builder()
+                .locationId("non-exist-id")
+                .programId(programId)
+                .build();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .put("/api/courses/" + id)
+                        .content(objectMapper.writeValueAsString(updateCourseRequest))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
+    }
+
 }
