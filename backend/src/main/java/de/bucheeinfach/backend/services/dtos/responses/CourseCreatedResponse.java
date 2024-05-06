@@ -21,9 +21,9 @@ public class CourseCreatedResponse {
     private String locationName;
     private int quota;
     private String trainer;
-    private double price;
     private LocalDate startDate;
     private LocalDate endDate;
+    private double price;
     private String duration;
     private String timePlan;
     private String timePlanExcepted;
