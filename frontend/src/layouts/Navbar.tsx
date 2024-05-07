@@ -21,7 +21,8 @@ function Navbar() {
                     <div className="collapse navbar-collapse" id="navbarCollapse">
                         <ul className="navbar-nav me-auto mb-2 mb-md-0">
                             <li className="nav-item">
-                                <Link to={'/'} className="nav-link active text-decoration-none" aria-current="page">Home</Link>
+                                <Link to={'/'} className="nav-link active text-decoration-none"
+                                      aria-current="page">Home</Link>
                             </li>
                             <li className="nav-item">
                                 <Link to={'/'} className="nav-link text-decoration-none" aria-current="page">Link</Link>

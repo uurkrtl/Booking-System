@@ -1,6 +1,5 @@
 package de.bucheeinfach.backend.services.dtos.responses;
 
-import de.bucheeinfach.backend.models.enums.CourseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +16,8 @@ public class CourseCreatedResponse {
     private String id;
     private String programId;
     private String programName;
+    private String programDescription;
+    private String programImageUrl;
     private String locationId;
     private String locationName;
     private int quota;
@@ -27,7 +28,7 @@ public class CourseCreatedResponse {
     private String duration;
     private String timePlan;
     private String timePlanExcepted;
-    private CourseStatus status;
+    private String status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }

@@ -1,6 +1,5 @@
 package de.bucheeinfach.backend.services.dtos.responses;
 
-import de.bucheeinfach.backend.models.enums.CourseStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,7 +12,11 @@ import java.time.LocalDate;
 public class CourseGetAllResponse {
     private String id;
     private String programId;
+    private String programName;
+    private String programDescription;
+    private String programImageUrl;
     private String locationId;
+    private String locationName;
     private LocalDate startDate;
-    private CourseStatus status;
+    private String status;
 }

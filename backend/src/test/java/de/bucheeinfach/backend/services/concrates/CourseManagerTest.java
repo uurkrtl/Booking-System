@@ -160,7 +160,7 @@ class CourseManagerTest {
         // GIVEN
         String id = "1";
         Course course = Course.builder().id(id).status(CourseStatus.ACTIVE).build();
-        CourseCreatedResponse expectedResponse = CourseCreatedResponse.builder().id(id).status(CourseStatus.COMPLETED).build();
+        CourseCreatedResponse expectedResponse = CourseCreatedResponse.builder().id(id).status(CourseStatus.COMPLETED.name()).build();
 
         // WHEN
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
