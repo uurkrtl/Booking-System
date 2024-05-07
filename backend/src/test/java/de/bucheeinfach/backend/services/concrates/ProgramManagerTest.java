@@ -2,7 +2,10 @@ package de.bucheeinfach.backend.services.concrates;
 
 import de.bucheeinfach.backend.core.exceptions.types.RecordNotFoundException;
 import de.bucheeinfach.backend.core.mappers.ModelMapperService;
+import de.bucheeinfach.backend.models.Course;
 import de.bucheeinfach.backend.models.Program;
+import de.bucheeinfach.backend.models.enums.CourseStatus;
+import de.bucheeinfach.backend.repositories.CourseRepository;
 import de.bucheeinfach.backend.repositories.ProgramRepository;
 import de.bucheeinfach.backend.services.abstracts.IdService;
 import de.bucheeinfach.backend.services.dtos.requests.ProgramRequest;
@@ -29,6 +32,9 @@ class ProgramManagerTest {
 
     @Mock
     private ProgramRepository programRepository;
+
+    @Mock
+    private CourseRepository courseRepository;
 
     @Mock
     private ProgramBusinessRule programBusinessRule;
@@ -188,5 +194,29 @@ class ProgramManagerTest {
         // THEN
         verify(programRepository, times(1)).save(program);
         assertEquals(expectedResponse.isStatus(), actualResponse.isStatus());
+    }
+
+    @Test
+    void getActiveProgramsSortedByNumberOfCourses_returnListOfProgram() {
+        // GIVEN
+        List<Program> programs = List.of(
+                Program.builder().id("1").build(),
+                Program.builder().id("2").build()
+        );
+
+        List<Course> courses = List.of(
+                Course.builder().id("1").status(CourseStatus.ACTIVE).program(programs.get(1)).build(),
+                Course.builder().id("1").status(CourseStatus.ACTIVE).program(programs.get(0)).build()
+        );
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(programRepository.findAll()).thenReturn(programs);
+        when(courseRepository.findAll()).thenReturn(courses);
+
+        List<ProgramGetAllResponse> responses = programManager.getActiveProgramsSortedByNumberOfCourses();
+
+        // THEN
+        assertEquals(2, responses.size());
     }
 }
