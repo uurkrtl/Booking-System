@@ -75,3 +75,14 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_TAG }}
           context: .
+  deploy:
+    name: deploy-to-render
+    runs-on: ubuntu-latest
+    needs: push-to-docker-hub
+    environment:
+      name: Booking System
+      url: https://booking-system-3wgt.onrender.com
+    steps:
+      - name: Trigger Render.com Deployment
+        run: |
+          curl -X POST ${{ secrets.RENDER_DEPLOY }} #muss mit der url des Render Deployments übereinstimmen
