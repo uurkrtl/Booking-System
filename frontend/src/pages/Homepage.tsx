@@ -3,11 +3,15 @@ import {Link} from "react-router-dom";
 import CourseService from "../services/CourseService.ts";
 import {useEffect, useState} from "react";
 import {Course} from "../types/Course.ts";
+import ProgramService from "../services/ProgramService.ts";
+import {Program} from "../types/Program.ts";
 
 const courseService = new CourseService();
+const programService = new ProgramService();
 
 function Homepage() {
     const [courses, setCourses] = useState<Course[]>([]);
+    const [programs, setPrograms] = useState<Program[]>([].slice(0, 3));
     const [errorMessage, setErrorMessage] = useState<string>('')
     const [loading, setLoading] = useState(true);
 
@@ -19,12 +23,20 @@ function Homepage() {
     }
 
     useEffect(() => {
+        programService.getActiveProgramsSortedByNumberOfCourses().then((response) => {
+            setPrograms(response.data);
+            setErrorMessage('');
+        }).catch(error => {
+            setErrorMessage(`Fehler beim Abrufen von Programm: ${error.message}`);
+        });
+    },[])
+
+    useEffect(() => {
         courseService.getAllCourses().then((response) => {
             setCourses(response.data);
             setLoading(false);
-            console.log(response)
+            setErrorMessage('');
         }).catch(error => {
-            console.log(error.message)
             setErrorMessage(`Fehler beim Abrufen von Kurse: ${error.message}`);
             setLoading(false);
         });
@@ -53,47 +65,13 @@ function Homepage() {
                 </div>
                 <div className="carousel-inner">
                     <div className="carousel-item">
-                        <svg className="bd-placeholder-img" width="100%" height="100%"
-                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice"
-                             focusable="false">
-                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                        </svg>
-                        <div className="container">
-                            <div className="carousel-caption text-start">
-                                <h1>Example headline.</h1>
-                                <p className="opacity-75">Some representative placeholder content for the first slide of
-                                    the carousel.</p>
-                                <p><Link to={'/'} className="btn btn-lg btn-primary" >Sign up today</Link></p>
-                            </div>
-                        </div>
+                        <img src="https://i.ibb.co/Ctc8hfq/Carousel1.jpg" className="bd-placeholder-img" width="100%" height="100%" alt="sportszentrum"/>
                     </div>
                     <div className="carousel-item">
-                        <svg className="bd-placeholder-img" width="100%" height="100%"
-                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice"
-                             focusable="false">
-                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                        </svg>
-                        <div className="container">
-                            <div className="carousel-caption">
-                                <h1>Another example headline.</h1>
-                                <p>Some representative placeholder content for the second slide of the carousel.</p>
-                                <p><Link to={'/'} className="btn btn-lg btn-primary">Learn more</Link></p>
-                            </div>
-                        </div>
+                        <img src="https://i.ibb.co/72T8p4K/Carousel3.jpg" className="bd-placeholder-img" width="100%" height="100%" alt="courusel"/>
                     </div>
                     <div className="carousel-item active">
-                        <svg className="bd-placeholder-img" width="100%" height="100%"
-                             xmlns="http://www.w3.org/2000/svg" aria-hidden="true" preserveAspectRatio="xMidYMid slice"
-                             focusable="false">
-                            <rect width="100%" height="100%" fill="var(--bs-secondary-color)"></rect>
-                        </svg>
-                        <div className="container">
-                            <div className="carousel-caption text-end">
-                                <h1>One more for good measure.</h1>
-                                <p>Some representative placeholder content for the third slide of this carousel.</p>
-                                <p><Link to={'/'} className="btn btn-lg btn-primary">Browse gallery</Link></p>
-                            </div>
-                        </div>
+                        <img src="https://i.ibb.co/DVPPGtk/Carousel2.jpg" className="bd-placeholder-img" width="100%" height="100%" alt="courusel"/>
                     </div>
                 </div>
                 <button className="carousel-control-prev" type="button" data-bs-target="#myCarousel"
@@ -117,35 +95,18 @@ function Homepage() {
 
                 {/* Three columns of text below the carousel */}
                 <div className="row">
-                    <div className="col-lg-4">
-                        <img className="bd-placeholder-img rounded-circle" width="140" height="140"
-                             src="https://meinsportpodcast.de/wp-content/uploads/Fu%C3%9Fball/thumbnail/300_0014_Fussball-e1532085216322.jpg"
-                             alt="Fussball"/>
-                        <h2 className="fw-normal">Heading</h2>
-                        <p>Some representative placeholder content for the three columns of text below the carousel.
-                            This is the first column.</p>
-                        <p><Link to={'/'} className="btn btn-secondary">View details »</Link></p>
-                    </div>
-                    {/* /.col-lg-4 */}
-                    <div className="col-lg-4">
-                        <img className="bd-placeholder-img rounded-circle" width="140" height="140"
-                             src="https://meinsportpodcast.de/wp-content/uploads/Fu%C3%9Fball/thumbnail/300_0014_Fussball-e1532085216322.jpg"
-                             alt="Fussball"/>
-                        <h2 className="fw-normal">Heading</h2>
-                        <p>Another exciting bit of representative placeholder content. This time, we've moved on to the
-                            second column.</p>
-                        <p><Link to={'/'} className="btn btn-secondary">View details »</Link></p>
-                    </div>
-                    {/* /.col-lg-4 */}
-                    <div className="col-lg-4">
-                        <img className="bd-placeholder-img rounded-circle" width="140" height="140"
-                             src="https://meinsportpodcast.de/wp-content/uploads/Fu%C3%9Fball/thumbnail/300_0014_Fussball-e1532085216322.jpg"
-                             alt="Fussball"/>
-                        <h2 className="fw-normal">Heading</h2>
-                        <p>And lastly this, the third column of representative placeholder content.</p>
-                        <p><Link to={'/'} className="btn btn-secondary">View details »</Link></p>
-                    </div>
-                    {/* /.col-lg-4 */}
+                    {programs.map((program) => {
+                        return (
+                            <div key={program.id} className="col-lg-4">
+                                <img className="bd-placeholder-img rounded-circle" width="140" height="140"
+                                     src={program.marketingImageUrl}
+                                     alt="Fussball"/>
+                                <h2 className="fw-normal">{program.name}</h2>
+                                <p><Link to={'/'} className="btn btn-secondary">Kurse ansehen »</Link></p>
+                            </div>
+                        )
+
+                    })}
                 </div>
                 {/* /.row */}
 
@@ -162,9 +123,17 @@ function Homepage() {
                                                  alt={course.programName}
                                                  src={course.programImageUrl}/>
                                             <div className="card-body">
-                                                <p className="card-title"><b>{truncateText(course.programName, 70) }</b></p>
-                                                <p><img src={"public/geo-alt-fill.svg"} height="16" alt="logo"/>{course.locationName}</p>
-                                                <p className="card-text">{truncateText(course.programDescription,140)}</p>
+                                                <h3 className="mb-0">{truncateText(course.programName, 70)}</h3>
+
+                                                <div className="row mb-2">
+                                                    <div className="col-md-8 text-start"><img src={"/public/geo-alt-fill.svg"} height="16"
+                                                                                              alt="ort"/>{course.locationName}</div>
+                                                    <div className="col-md-4 text-end"><img src={"/public/calendar4-week.svg"} height="16"
+                                                                                            alt="datum"/>{course.startDate ? new Date(course.startDate).toLocaleDateString('de-DE') : "-"}
+                                                    </div>
+                                                </div>
+
+                                                <p className="card-text">{truncateText(course.programDescription, 140)}</p>
                                                 <div className="d-flex justify-content-between align-items-center">
                                                     <div className="btn-group">
                                                         <button type="button"
