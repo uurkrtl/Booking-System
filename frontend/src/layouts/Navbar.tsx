@@ -8,7 +8,7 @@ function Navbar() {
                 <div className="container-fluid">
                     <div className="mx-1">
                         <Link to={'/'} className="navbar-brand text-decoration-none">
-                            <img src={"public/logo.svg"} height="32" alt="logo"/>
+                            <img src={"/public/logo.svg"} height="32" alt="logo"/>
                         </Link>
                     </div>
                     <Link to={'/'} className="navbar-brand text-decoration-none">Buchungssystem</Link>

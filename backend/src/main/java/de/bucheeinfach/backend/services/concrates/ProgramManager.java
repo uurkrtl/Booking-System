@@ -2,7 +2,10 @@ package de.bucheeinfach.backend.services.concrates;
 
 import de.bucheeinfach.backend.core.exceptions.types.RecordNotFoundException;
 import de.bucheeinfach.backend.core.mappers.ModelMapperService;
+import de.bucheeinfach.backend.models.Course;
 import de.bucheeinfach.backend.models.Program;
+import de.bucheeinfach.backend.models.enums.CourseStatus;
+import de.bucheeinfach.backend.repositories.CourseRepository;
 import de.bucheeinfach.backend.repositories.ProgramRepository;
 import de.bucheeinfach.backend.services.abstracts.IdService;
 import de.bucheeinfach.backend.services.abstracts.ProgramService;
@@ -15,12 +18,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class ProgramManager implements ProgramService {
     private final ProgramRepository programRepository;
+    private final CourseRepository courseRepository;
     private final IdService idService;
     private final ModelMapperService modelMapperService;
     private final ProgramBusinessRule programBusinessRule;
@@ -70,5 +76,16 @@ public class ProgramManager implements ProgramService {
         program.setUpdatedAt(LocalDateTime.now());
         program = programRepository.save(program);
         return modelMapperService.forResponse().map(program, ProgramCreatedResponse.class);
+    }
+
+    @Override
+    public List<ProgramGetAllResponse> getActiveProgramsSortedByNumberOfCourses() {
+        List<Course> courses = courseRepository.findAll();
+        Map<Program, Integer> programs = new HashMap<>();
+        courses.stream().filter(course -> course.getStatus().equals(CourseStatus.ACTIVE)).forEach(course -> programs.put(course.getProgram(), programs.getOrDefault(course.getProgram(), 0) + 1));
+        return programs.entrySet().stream()
+                .sorted(Map.Entry.<Program, Integer>comparingByValue().reversed())
+                .map(programIntegerEntry -> modelMapperService.forResponse()
+                        .map(programIntegerEntry.getKey(), ProgramGetAllResponse.class)).toList();
     }
 }

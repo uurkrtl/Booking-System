@@ -12,4 +12,5 @@ public interface ProgramService {
     ProgramCreatedResponse addProgram(ProgramRequest programRequest);
     ProgramCreatedResponse updateProgram(String id, ProgramRequest programRequest);
     ProgramCreatedResponse changeProgramStatus(String id, boolean status);
+    List<ProgramGetAllResponse> getActiveProgramsSortedByNumberOfCourses();
 }

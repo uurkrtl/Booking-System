@@ -42,4 +42,9 @@ public class ProgramController {
     ProgramCreatedResponse changeProgramStatus (@PathVariable String id, @RequestParam boolean status) {
         return programService.changeProgramStatus(id, status);
     }
+
+    @GetMapping("/active")
+    List<ProgramGetAllResponse> getActiveProgramsSortedByNumberOfCourses () {
+        return programService.getActiveProgramsSortedByNumberOfCourses();
+    }
 }
