@@ -1,7 +1,44 @@
 import './Homepage.css'
 import {Link} from "react-router-dom";
+import CourseService from "../services/CourseService.ts";
+import {useEffect, useState} from "react";
+import {Course} from "../types/Course.ts";
+
+const courseService = new CourseService();
 
 function Homepage() {
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [errorMessage, setErrorMessage] = useState<string>('')
+    const [loading, setLoading] = useState(true);
+
+    const truncateText = (text: string, maxLength: number) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength - 3) + '...';
+        }
+        return text;
+    }
+
+    useEffect(() => {
+        courseService.getAllCourses().then((response) => {
+            setCourses(response.data);
+            setLoading(false);
+            console.log(response)
+        }).catch(error => {
+            console.log(error.message)
+            setErrorMessage(`Fehler beim Abrufen von Kurse: ${error.message}`);
+            setLoading(false);
+        });
+    },[])
+
+    if (loading) {
+        return <div className={'container mt-3'}>
+            <div className={'spinner-border text-primary mt-3'}>
+                <span className={'visually-hidden'}></span>
+            </div>
+            <h5>Wird geledan...</h5>
+        </div>;
+    }
+
     return (
         <main>
 
@@ -117,29 +154,39 @@ function Homepage() {
                     <div className="container">
 
                         <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-                            <div className="col">
-                                <div className="card shadow-sm">
-                                    <img className="bd-placeholder-img card-img-top" width="100%" height="225" alt="Fussball"
-                                    src="https://www.molten.de/cdn/shop/collections/molten-fussball-uefa-europa-league.jpg?crop=center&height=960&v=1702291678&width=1920"/>
-                                    <div className="card-body">
-                                        <p className="card-text">This is a wider card with supporting text below as a
-                                            natural lead-in to additional content. This content is a little bit
-                                            longer.</p>
-                                        <div className="d-flex justify-content-between align-items-center">
-                                            <div className="btn-group">
-                                                <button type="button"
-                                                        className="btn btn-sm btn-outline-secondary">View
-                                                </button>
-                                                <button type="button"
-                                                        className="btn btn-sm btn-outline-secondary">Edit
-                                                </button>
+                            {courses.filter(course => course.status === 'ACTIVE').map((course) => {
+                                return (
+                                    <div key={course.id} className="col">
+                                        <div className="card shadow-sm">
+                                            <img className="bd-placeholder-img card-img-top" width="100%" height="225"
+                                                 alt={course.programName}
+                                                 src={course.programImageUrl}/>
+                                            <div className="card-body">
+                                                <p className="card-title"><b>{truncateText(course.programName, 70) }</b></p>
+                                                <p><img src={"public/geo-alt-fill.svg"} height="16" alt="logo"/>{course.locationName}</p>
+                                                <p className="card-text">{truncateText(course.programDescription,140)}</p>
+                                                <div className="d-flex justify-content-between align-items-center">
+                                                    <div className="btn-group">
+                                                        <button type="button"
+                                                                className="btn btn-sm btn-outline-secondary">Mehr Info
+                                                        </button>
+                                                        <button type="button"
+                                                                className="btn btn-sm btn-outline-secondary">Anmeldung
+                                                        </button>
+                                                    </div>
+                                                    <small className="text-body-secondary">Freie Plätze: {}</small>
+                                                </div>
                                             </div>
-                                            <small className="text-body-secondary">9 mins</small>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
+                                )
+                            })}
                         </div>
+                        {errorMessage && (
+                            <div className="alert alert-danger mt-3" role="alert">
+                                {errorMessage}
+                            </div>
+                        )}
                     </div>
                 </div>
                 {/* /Cards */}
