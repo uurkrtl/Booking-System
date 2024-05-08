@@ -1,10 +1,10 @@
 import './Homepage.css'
 import {Link} from "react-router-dom";
-import CourseService from "../services/CourseService.ts";
+import CourseService from "../../services/CourseService.ts";
 import {useEffect, useState} from "react";
-import {Course} from "../types/Course.ts";
-import ProgramService from "../services/ProgramService.ts";
-import {Program} from "../types/Program.ts";
+import {Course} from "../../types/Course.ts";
+import ProgramService from "../../services/ProgramService.ts";
+import {Program} from "../../types/Program.ts";
 
 const courseService = new CourseService();
 const programService = new ProgramService();
@@ -100,9 +100,9 @@ function Homepage() {
                             <div key={program.id} className="col-lg-4">
                                 <img className="bd-placeholder-img rounded-circle" width="140" height="140"
                                      src={program.marketingImageUrl}
-                                     alt="Fussball"/>
+                                     alt={program.name}/>
                                 <h2 className="fw-normal">{program.name}</h2>
-                                <p><Link to={'/'} className="btn btn-secondary">Kurse ansehen »</Link></p>
+                                <p><Link to={'/courses/' + program.id} className="btn btn-primary">Kurse ansehen »</Link></p>
                             </div>
                         )
 

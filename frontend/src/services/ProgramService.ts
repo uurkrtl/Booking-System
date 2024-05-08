@@ -6,6 +6,10 @@ export default class ProgramService {
     }
 
     getAllPrograms() {
-        return axios.get('api/programs')
+        return axios.get('/api/programs')
+    }
+
+    getProgramById(id: string) {
+        return axios.get(`/api/programs/${id}`)
     }
 }

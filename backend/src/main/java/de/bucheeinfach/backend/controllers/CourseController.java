@@ -41,4 +41,9 @@ public class CourseController {
     CourseCreatedResponse changeCourseStatus(@PathVariable String id, @RequestParam String status) {
         return courseService.changeCourseStatus(id, status);
     }
+
+    @GetMapping("/byProgram/{programId}")
+    List<CourseGetAllResponse> getCoursesByProgramId(@PathVariable String programId) {
+        return courseService.getCoursesByProgramId(programId);
+    }
 }

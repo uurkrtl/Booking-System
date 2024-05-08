@@ -16,6 +16,7 @@ public class ProgramCreatedResponse {
     private String name;
     private String description;
     private String imageUrl;
+    private String marketingImageUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private boolean status;

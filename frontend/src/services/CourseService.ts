@@ -4,4 +4,8 @@ export default class CourseService {
     getAllCourses() {
         return axios.get('/api/courses')
     }
+
+    getCoursesByProgramId(programId: string) {
+        return axios.get(`/api/courses/byProgram/${programId}`)
+    }
 }
