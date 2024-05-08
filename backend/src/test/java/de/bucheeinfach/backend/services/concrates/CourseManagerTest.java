@@ -21,6 +21,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,7 +68,7 @@ class CourseManagerTest {
 
         // WHEN
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
-        when(courseRepository.findAll()).thenReturn(expectedCourses);
+        when(courseRepository.findAll(Sort.by(Sort.Direction.ASC, "startDate"))).thenReturn(expectedCourses);
 
         List<CourseGetAllResponse> actualResponse = courseManager.getAllCourses();
 

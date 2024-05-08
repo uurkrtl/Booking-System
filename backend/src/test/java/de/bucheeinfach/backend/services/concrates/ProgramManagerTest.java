@@ -18,6 +18,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,7 +62,7 @@ class ProgramManagerTest {
 
         // WHEN
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
-        when(programRepository.findAll()).thenReturn(programs);
+        when(programRepository.findAll(Sort.by(Sort.Direction.ASC, "name"))).thenReturn(programs);
 
         List<ProgramGetAllResponse> responses = programManager.getAllPrograms();
 
