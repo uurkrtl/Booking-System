@@ -1,14 +1,26 @@
 import {Link} from "react-router-dom";
+import ProgramService from "../services/ProgramService.ts";
+import {useEffect, useState} from "react";
+import {Program} from "../types/Program.ts";
 
+const programService = new ProgramService();
 
 function Navbar() {
+    const [programs, setPrograms] = useState<Program[]>([]);
+
+    useEffect(() => {
+        programService.getAllPrograms().then((response) => {
+            setPrograms(response.data)
+        })
+    },[]);
+
     return (
         <header data-bs-theme="dark">
             <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
                 <div className="container-fluid">
                     <div className="mx-1">
                         <Link to={'/'} className="navbar-brand text-decoration-none">
-                            <img src={"/public/logo.svg"} height="32" alt="logo"/>
+                            <img src="https://i.ibb.co/vBqFncq/logo.png" height="32" alt="logo"/>
                         </Link>
                     </div>
                     <Link to={'/'} className="navbar-brand text-decoration-none">Buchungssystem</Link>
@@ -24,8 +36,20 @@ function Navbar() {
                                 <Link to={'/'} className="nav-link active text-decoration-none"
                                       aria-current="page">Home</Link>
                             </li>
-                            <li className="nav-item">
-                                <Link to={'/'} className="nav-link text-decoration-none" aria-current="page">Link</Link>
+                            <li className="nav-item dropdown">
+                                <Link to={'/'} className="nav-link dropdown-toggle text-decoration-none"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false">Sportangebote</Link>
+                                <ul className="dropdown-menu">
+                                    {programs.map((program) => {
+                                        return (
+                                            <li key={program.id}>
+                                                <Link to={`/course-list/${program.id}`}
+                                                      className="dropdown-item">{program.name}</Link>
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
                             </li>
                         </ul>
                         <form className="d-flex" role="search">
