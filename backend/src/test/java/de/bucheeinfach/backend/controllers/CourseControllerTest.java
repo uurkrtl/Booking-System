@@ -18,6 +18,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static org.hamcrest.Matchers.greaterThanOrEqualTo;
+import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
@@ -208,5 +212,24 @@ class CourseControllerTest {
                         .param("status", newStatus)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    void getCoursesByProgramId() throws Exception {
+        String locationId = locationService.addLocation(LocationRequest.builder().name("Test").address("Test Address").build()).getId();
+        String programId = programService.addProgram(ProgramRequest.builder().name("Test").description("Test Description").build()).getId();
+        CourseRequest courseRequest = CourseRequest.builder()
+                .locationId(locationId)
+                .programId(programId)
+                .build();
+
+        courseService.addCourse(courseRequest);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/courses/byProgram/" + programId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$", hasSize(greaterThanOrEqualTo(0))));
     }
 }

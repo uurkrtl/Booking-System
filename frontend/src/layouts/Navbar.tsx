@@ -44,7 +44,7 @@ function Navbar() {
                                     {programs.map((program) => {
                                         return (
                                             <li key={program.id}>
-                                                <Link to={`/course-list/${program.id}`}
+                                                <Link to={`/courses/${program.id}`}
                                                       className="dropdown-item">{program.name}</Link>
                                             </li>
                                         );

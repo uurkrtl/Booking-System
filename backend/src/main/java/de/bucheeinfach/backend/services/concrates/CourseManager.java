@@ -85,4 +85,11 @@ public class CourseManager implements CourseService {
         course = courseRepository.save(course);
         return modelMapperService.forResponse().map(course, CourseCreatedResponse.class);
     }
+
+    @Override
+    public List<CourseGetAllResponse> getCoursesByProgramId(String programId) {
+        Program program = programRepository.findById(programId).orElseThrow(() -> new RecordNotFoundException(ProgramMessage.PROGRAM_NOT_FOUND));
+        List<Course> coursesByProgram = courseRepository.findAllByProgramId(program.getId());
+        return coursesByProgram.stream().map(course -> modelMapperService.forResponse().map(course, CourseGetAllResponse.class)).toList();
+    }
 }

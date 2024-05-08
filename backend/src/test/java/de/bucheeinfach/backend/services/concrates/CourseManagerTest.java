@@ -199,4 +199,24 @@ class CourseManagerTest {
         // THEN
         assertThrows(IllegalArgumentException.class, () -> courseManager.changeCourseStatus("1", "INVALID_STATUS"));
     }
+
+    @Test
+    void getCoursesByProgramId_returnListOfCoursesByProgram() {
+        // GIVEN
+        Program program = Program.builder().id("1").build();
+        List<Course> expectedCourses = List.of(
+                Course.builder().program(program).build(),
+                Course.builder().program(program).build()
+        );
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(courseRepository.findAllByProgramId("1")).thenReturn(expectedCourses);
+        when(programRepository.findById("1")).thenReturn(Optional.of(program));
+
+        List<CourseGetAllResponse> actualResponse = courseManager.getCoursesByProgramId("1");
+
+        // THEN
+        assertEquals(expectedCourses.size(), actualResponse.size());
+    }
 }
