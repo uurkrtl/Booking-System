@@ -126,10 +126,35 @@ function Homepage() {
                                                 <h3 className="mb-0">{truncateText(course.programName, 70)}</h3>
 
                                                 <div className="row mb-2">
-                                                    <div className="col-md-8 text-start"><img src={"/public/geo-alt-fill.svg"} height="16"
-                                                                                              alt="ort"/>{course.locationName}</div>
-                                                    <div className="col-md-4 text-end"><img src={"/public/calendar4-week.svg"} height="16"
-                                                                                            alt="datum"/>{course.startDate ? new Date(course.startDate).toLocaleDateString('de-DE') : "-"}
+                                                    <div className="col-md-8 text-start">
+                                                        <svg height="16" xmlns="http://www.w3.org/2000/svg"
+                                                             viewBox="0 0 64 64"
+                                                             id="location">
+                                                            <path fill="#e3e2e1"
+                                                                  d="M54.01 58.74C54.01 61.65 44.15 64 32 64c-12.15 0-22.01-2.35-22.01-5.26 0-2.6 7.9-4.74 18.26-5.18h7.5c10.37.44 18.26 2.58 18.26 5.18z"></path>
+                                                            <path fill="#e82327"
+                                                                  d="M32 0C20.7 0 11.54 9.15 11.54 20.45 11.54 31.75 32 58.74 32 58.74s20.45-26.99 20.45-38.29S43.3 0 32 0zm0 33.99c-7.48 0-13.54-6.06-13.54-13.54S24.52 6.91 32 6.91c7.48 0 13.54 6.06 13.54 13.54S39.48 33.99 32 33.99z"></path>
+                                                        </svg>
+                                                        {course.locationName}
+                                                    </div>
+                                                    <div className="col-md-4 text-end">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" height="22"
+                                                             enableBackground="new 0 0 24 24" viewBox="0 0 24 24"
+                                                             id="calendar">
+                                                            <path fill="#b2b1ff"
+                                                                  d="M7 6a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v2a1 1 0 0 1-.999 1H7zm10 0a1 1 0 0 1-1-1V3a1 1 0 0 1 2 0v2a1 1 0 0 1-.999 1H17z"></path>
+                                                            <path fill="#6563ff"
+                                                                  d="M19 4h-1v1a1 1 0 0 1-2 0V4H8v1a1 1 0 0 1-2 0V4H5a3 3 0 0 0-3 3v2h20V7a3 3 0 0 0-3-3z"></path>
+                                                            <circle cx="7" cy="13" r="1" fill="#6563ff"></circle>
+                                                            <circle cx="7" cy="17" r="1" fill="#6563ff"></circle>
+                                                            <circle cx="12" cy="13" r="1" fill="#6563ff"></circle>
+                                                            <circle cx="12" cy="17" r="1" fill="#6563ff"></circle>
+                                                            <circle cx="17" cy="13" r="1" fill="#6563ff"></circle>
+                                                            <circle cx="17" cy="17" r="1" fill="#6563ff"></circle>
+                                                            <path fill="#b2b1ff"
+                                                                  d="M2 9v10a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3V9H2zm5 9a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm5 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm5 4a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0-4a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"></path>
+                                                        </svg>
+                                                        {course.startDate ? new Date(course.startDate).toLocaleDateString('de-DE') : "-"}
                                                     </div>
                                                 </div>
 
@@ -137,10 +162,10 @@ function Homepage() {
                                                 <div className="d-flex justify-content-between align-items-center">
                                                     <div className="btn-group">
                                                         <button type="button"
-                                                                className="btn btn-sm btn-outline-secondary">Mehr Info
+                                                                className="btn btn-sm btn-outline-primary">Mehr Info
                                                         </button>
                                                         <button type="button"
-                                                                className="btn btn-sm btn-outline-secondary">Anmeldung
+                                                                className="btn btn-sm btn-outline-success">Anmeldung
                                                         </button>
                                                     </div>
                                                     <small className="text-body-secondary">Freie Plätze: {}</small>

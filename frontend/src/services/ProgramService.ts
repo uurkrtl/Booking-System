@@ -4,4 +4,8 @@ export default class ProgramService {
     getActiveProgramsSortedByNumberOfCourses() {
         return axios.get('/api/programs/active')
     }
+
+    getAllPrograms() {
+        return axios.get('api/programs')
+    }
 }

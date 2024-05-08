@@ -19,6 +19,7 @@ import de.bucheeinfach.backend.services.messages.LocationMessage;
 import de.bucheeinfach.backend.services.messages.ProgramMessage;
 import de.bucheeinfach.backend.services.rules.CourseBusinessRule;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -36,7 +37,7 @@ public class CourseManager implements CourseService {
 
     @Override
     public List<CourseGetAllResponse> getAllCourses() {
-        List<Course> courses = courseRepository.findAll();
+        List<Course> courses = courseRepository.findAll(Sort.by(Sort.Direction.ASC, "startDate"));
         return courses.stream().map(course -> modelMapperService.forResponse().map(course, CourseGetAllResponse.class)).toList();
     }
 

@@ -15,6 +15,7 @@ import de.bucheeinfach.backend.services.dtos.responses.ProgramGetAllResponse;
 import de.bucheeinfach.backend.services.messages.ProgramMessage;
 import de.bucheeinfach.backend.services.rules.ProgramBusinessRule;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -33,7 +34,7 @@ public class ProgramManager implements ProgramService {
 
     @Override
     public List<ProgramGetAllResponse> getAllPrograms() {
-        List<Program> programs = programRepository.findAll();
+        List<Program> programs = programRepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
         return programs.stream()
                 .map(program -> modelMapperService.forResponse()
                         .map(program, ProgramGetAllResponse.class)).toList();
