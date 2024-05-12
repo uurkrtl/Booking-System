@@ -8,4 +8,8 @@ export default class CourseService {
     getCoursesByProgramId(programId: string) {
         return axios.get(`/api/courses/byProgram/${programId}`)
     }
+
+    getCourseById(id: string) {
+        return axios.get(`/api/courses/${id}`)
+    }
 }

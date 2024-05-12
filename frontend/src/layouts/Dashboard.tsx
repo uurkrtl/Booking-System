@@ -3,6 +3,7 @@ import Homepage from "../pages/Homepage/Homepage.tsx";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
 import CourseList from "../pages/CourseList.tsx";
+import CourseDetail from "../pages/CourseDetail.tsx";
 
 
 function Dashboard() {
@@ -13,6 +14,7 @@ function Dashboard() {
                 <Routes>
                     <Route path={'/'} element={<Homepage/>}/>
                     <Route path={'/courses/:programId'} element={<CourseList/>}/>
+                    <Route path={'/courses/detail/:courseId'} element={<CourseDetail/>}/>
                 </Routes>
             </div>
             <Footer/>

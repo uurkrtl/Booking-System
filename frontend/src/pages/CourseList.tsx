@@ -44,7 +44,6 @@ function CourseList() {
         }).catch(error => {
             setErrorMessage(`Fehler beim Abrufen von Kurse: ${error.message}`);
             setLoading(false)
-            console.log(error.message);
         })
     },[programId]);
 
@@ -94,7 +93,7 @@ function CourseList() {
                             <tr key={course.id}>
                                 <td>{truncateText(course.locationName, 40)}</td>
                                 <td>{course.startDate ? new Date(course.startDate).toLocaleDateString('de-DE') : "-"}</td>
-                                <td><Link to={`/`} className="btn btn-outline-info">Detail</Link></td>
+                                <td><Link to={'/courses/detail/' + course.id} className="btn btn-outline-info">Detail</Link></td>
                                 <td><Link to={`/`} className="btn btn-outline-success">Anmeldung</Link></td>
                             </tr>
                         );

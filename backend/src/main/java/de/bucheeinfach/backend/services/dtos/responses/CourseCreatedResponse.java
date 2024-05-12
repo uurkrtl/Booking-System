@@ -1,5 +1,7 @@
 package de.bucheeinfach.backend.services.dtos.responses;
 
+import de.bucheeinfach.backend.models.Location;
+import de.bucheeinfach.backend.models.Program;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +20,7 @@ public class CourseCreatedResponse {
     private String programName;
     private String programDescription;
     private String programImageUrl;
+    private String programMarketingImageUrl;
     private String locationId;
     private String locationName;
     private int quota;
@@ -31,4 +34,6 @@ public class CourseCreatedResponse {
     private String status;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Program program;
+    private Location location;
 }

@@ -4,4 +4,5 @@ public interface IdService {
     String generateProgramId();
     String generateLocationId();
     String generateCourseId();
+    String generateCourseApplicationId();
 }
