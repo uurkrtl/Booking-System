@@ -1,3 +1,6 @@
+import {Program} from "./Program.ts";
+import {Location} from "./Location.ts";
+
 export type Course = {
     id: string,
     programId: string,
@@ -17,4 +20,6 @@ export type Course = {
     status: string,
     createdAt: Date,
     updatedAt: Date
+    program: Program,
+    location: Location
 }

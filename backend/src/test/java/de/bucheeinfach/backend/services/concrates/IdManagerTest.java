@@ -53,4 +53,23 @@ class IdManagerTest {
         // THEN
         assertTrue(generatedId.startsWith("LOC-"));
     }
+
+    @Test
+    void generateCourseApplicationId_returnUniqueId() {
+        // GIVEN
+        String id1 = idManager.generateCourseApplicationId();
+        String id2 = idManager.generateCourseApplicationId();
+
+        // THEN
+        assertNotEquals(id1, id2);
+    }
+
+    @Test
+    void generateCourseApplicationId_returnsIdWithCorrectPrefix() {
+        // GIVEN
+        String generatedId = idManager.generateCourseApplicationId();
+
+        // THEN
+        assertTrue(generatedId.startsWith("CAP-"));
+    }
 }

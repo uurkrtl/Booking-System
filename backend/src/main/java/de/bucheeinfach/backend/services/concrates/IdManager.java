@@ -21,4 +21,9 @@ public class IdManager implements IdService {
     public String generateCourseId() {
         return "CRS-" + UUID.randomUUID();
     }
+
+    @Override
+    public String generateCourseApplicationId() {
+        return "CAP-" + UUID.randomUUID();
+    }
 }
