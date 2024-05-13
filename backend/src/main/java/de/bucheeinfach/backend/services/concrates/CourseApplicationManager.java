@@ -15,14 +15,14 @@ import de.bucheeinfach.backend.services.dtos.responses.CourseApplicationGetAllRe
 import de.bucheeinfach.backend.services.messages.CourseApplicationMessage;
 import de.bucheeinfach.backend.services.messages.CourseMessage;
 import de.bucheeinfach.backend.services.rules.CourseApplicationBusinessRule;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Data
 @RequiredArgsConstructor
+@Service
 public class CourseApplicationManager implements CourseApplicationService {
     private final CourseApplicationRepository courseApplicationRepository;
     private final CourseRepository courseRepository;
