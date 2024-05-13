@@ -158,7 +158,7 @@ class CourseControllerTest {
     }
 
     @Test
-    void changeCourseStatus_whenLocationExists_returnLocation() throws Exception {
+    void changeCourseStatus_whenCourseExists_returnCourse() throws Exception {
         // GIVEN
         String locationId = locationService.addLocation(LocationRequest.builder().name("Test Location").address("Test Address").build()).getId();
         String programId = programService.addProgram(ProgramRequest.builder().name("Test Program").description("Test Description").build()).getId();
