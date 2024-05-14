@@ -4,6 +4,7 @@ import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
 import CourseList from "../pages/CourseList.tsx";
 import CourseDetail from "../pages/CourseDetail.tsx";
+import CourseApplicationAdd from "../pages/Homepage/CourseApplicationAdd.tsx";
 
 
 function Dashboard() {
@@ -15,6 +16,7 @@ function Dashboard() {
                     <Route path={'/'} element={<Homepage/>}/>
                     <Route path={'/courses/:programId'} element={<CourseList/>}/>
                     <Route path={'/courses/detail/:courseId'} element={<CourseDetail/>}/>
+                    <Route path={'/course-application/register/:courseId'} element={<CourseApplicationAdd/>}/>
                 </Routes>
             </div>
             <Footer/>
