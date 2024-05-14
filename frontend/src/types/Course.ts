@@ -21,5 +21,6 @@ export type Course = {
     createdAt: Date,
     updatedAt: Date
     program: Program,
-    location: Location
+    location: Location,
+    freeSpace: number
 }

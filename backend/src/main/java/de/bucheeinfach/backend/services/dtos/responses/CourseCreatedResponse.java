@@ -36,4 +36,5 @@ public class CourseCreatedResponse {
     private LocalDateTime updatedAt;
     private Program program;
     private Location location;
+    private int freeSpace;
 }

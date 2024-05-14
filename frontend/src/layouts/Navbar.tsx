@@ -51,6 +51,16 @@ function Navbar() {
                                     })}
                                 </ul>
                             </li>
+                            <li className="nav-item dropdown">
+                                <Link to={'/'} className="nav-link dropdown-toggle text-decoration-none"
+                                      data-bs-toggle="dropdown"
+                                      aria-expanded="false">Admin</Link>
+                                <ul className="dropdown-menu">
+                                    <li>
+                                        <Link to={'/admin/courses'} className="dropdown-item">Kurse</Link>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
                         <form className="d-flex" role="search">
                             <input className="form-control me-2" type="search" placeholder="Search"
