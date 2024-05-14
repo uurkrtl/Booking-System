@@ -107,7 +107,7 @@ function CourseDetail() {
                              alt={course?.programName}
                              width="600" height="400" loading="lazy"/>
                         <div className="d-grid gap-2 d-md-flex justify-content-md-start py-5 text-center">
-                            <Link to={`/`} type="button" className="btn btn-primary btn-lg px-4 me-md-2">Anmelden</Link>
+                            <Link to={`/course-application/register/${course?.id}`} type="button" className="btn btn-primary btn-lg px-4 me-md-2">Anmelden</Link>
                             <Link to={'/courses/' + course?.program.id} type="button" className="btn btn-outline-secondary btn-lg px-4">Alle Angebote dieser Kategorie</Link>
                         </div>
                         {errorMessage && (

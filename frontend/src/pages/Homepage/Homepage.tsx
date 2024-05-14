@@ -164,9 +164,9 @@ function Homepage() {
                                                         <Link to={'/courses/detail/' + course.id} type="button"
                                                                 className="btn btn-sm btn-outline-primary">Mehr Info
                                                         </Link>
-                                                        <button type="button"
+                                                        <Link to={`/course-application/register/${course?.id}`} type="button"
                                                                 className="btn btn-sm btn-outline-success">Anmeldung
-                                                        </button>
+                                                        </Link>
                                                     </div>
                                                     <small className="text-body-secondary">Freie Plätze: {}</small>
                                                 </div>
