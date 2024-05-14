@@ -5,7 +5,9 @@ import de.bucheeinfach.backend.core.mappers.ModelMapperService;
 import de.bucheeinfach.backend.models.Course;
 import de.bucheeinfach.backend.models.Location;
 import de.bucheeinfach.backend.models.Program;
+import de.bucheeinfach.backend.models.enums.CourseApplicationStatus;
 import de.bucheeinfach.backend.models.enums.CourseStatus;
+import de.bucheeinfach.backend.repositories.CourseApplicationRepository;
 import de.bucheeinfach.backend.repositories.CourseRepository;
 import de.bucheeinfach.backend.repositories.LocationRepository;
 import de.bucheeinfach.backend.repositories.ProgramRepository;
@@ -30,6 +32,7 @@ import java.util.List;
 public class CourseManager implements CourseService {
     private final CourseRepository courseRepository;
     private final ProgramRepository programRepository;
+    private final CourseApplicationRepository courseApplicationRepository;
     private final LocationRepository locationRepository;
     private final IdService idService;
     private final ModelMapperService modelMapperService;
@@ -44,7 +47,10 @@ public class CourseManager implements CourseService {
     @Override
     public CourseCreatedResponse getCourseById(String id) {
         Course course = courseRepository.findById(id).orElseThrow(() -> new RecordNotFoundException(CourseMessage.COURSE_NOT_FOUND));
-        return modelMapperService.forResponse().map(course, CourseCreatedResponse.class);
+        CourseCreatedResponse courseCreatedResponse = modelMapperService.forResponse().map(course, CourseCreatedResponse.class);
+        long registeredNumberOfParticipants = courseApplicationRepository.findByCourseId(id).stream().filter(participant -> participant.getStatus() == CourseApplicationStatus.REGISTRATION_COMPLETE).count();
+        courseCreatedResponse.setFreeSpace(courseCreatedResponse.getQuota() - (int)registeredNumberOfParticipants);
+        return courseCreatedResponse;
     }
 
     @Override

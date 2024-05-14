@@ -3,9 +3,11 @@ package de.bucheeinfach.backend.services.concrates;
 import de.bucheeinfach.backend.core.exceptions.types.RecordNotFoundException;
 import de.bucheeinfach.backend.core.mappers.ModelMapperService;
 import de.bucheeinfach.backend.models.Course;
+import de.bucheeinfach.backend.models.CourseApplication;
 import de.bucheeinfach.backend.models.Location;
 import de.bucheeinfach.backend.models.Program;
 import de.bucheeinfach.backend.models.enums.CourseStatus;
+import de.bucheeinfach.backend.repositories.CourseApplicationRepository;
 import de.bucheeinfach.backend.repositories.CourseRepository;
 import de.bucheeinfach.backend.repositories.LocationRepository;
 import de.bucheeinfach.backend.repositories.ProgramRepository;
@@ -37,6 +39,9 @@ class CourseManagerTest {
 
     @Mock
     private CourseRepository courseRepository;
+
+    @Mock
+    private CourseApplicationRepository courseApplicationRepository;
 
     @Mock
     private ProgramRepository programRepository;
@@ -82,11 +87,16 @@ class CourseManagerTest {
         // GIVEN
         Course course = Course.builder().id("1").build();
         CourseCreatedResponse expectedResponse = CourseCreatedResponse.builder().id("1").build();
+        List<CourseApplication> courseApplications = List.of(
+                CourseApplication.builder().id("1").build(),
+                CourseApplication.builder().id("2").build()
+        );
 
         // WHEN
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
         when(courseRepository.findById("1")).thenReturn(Optional.of(course));
         when(modelMapper.map(course, CourseCreatedResponse.class)).thenReturn(expectedResponse);
+        when(courseApplicationRepository.findByCourseId("1")).thenReturn(courseApplications);
 
         CourseCreatedResponse actualResponse = courseManager.getCourseById("1");
 
