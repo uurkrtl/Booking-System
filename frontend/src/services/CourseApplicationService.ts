@@ -9,4 +9,8 @@ export default class CourseApplicationService {
     getCourseApplicationsByCourseId(courseId: string) {
         return axios.get(`/api/course-applications/course/${courseId}`);
     }
+
+    getCourseApplicationById(courseApplicationId: string) {
+        return axios.get(`/api/course-applications/${courseApplicationId}`)
+    }
 }

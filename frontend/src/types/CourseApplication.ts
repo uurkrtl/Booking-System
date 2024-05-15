@@ -1,3 +1,5 @@
+import {Course} from "./Course.ts";
+
 export type CourseApplication = {
     id: string,
     firstName: string,
@@ -7,5 +9,6 @@ export type CourseApplication = {
     courseId: string,
     status: string,
     createdAt: Date,
-    updatedAt: Date
+    updatedAt: Date,
+    course: Course
 }
