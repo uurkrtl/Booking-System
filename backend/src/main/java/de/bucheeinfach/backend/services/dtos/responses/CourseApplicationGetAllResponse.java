@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,4 +18,5 @@ public class CourseApplicationGetAllResponse {
     private String lastName;
     private String status;
     private Course course;
+    private LocalDateTime createdAt;
 }

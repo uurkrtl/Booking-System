@@ -93,7 +93,7 @@ function AdminCourseList() {
                             <td>{course.status}</td>
                             <td>{course.freeSpace}</td>
                             <td><Link to={`/courses/detail/${course.id}`} className="btn btn-outline-info">Detail</Link></td>
-                            <td><Link to={`/`} className="btn btn-outline-secondary">Teilnehmerliste</Link></td>
+                            <td><Link to={`/admin/course-applications/${course.id}`} className="btn btn-outline-secondary">Teilnehmerliste</Link></td>
                         </tr>
                     );
                 })}
