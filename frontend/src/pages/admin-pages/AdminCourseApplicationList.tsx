@@ -55,7 +55,7 @@ function AdminCourseApplicationList() {
                             <td>{courseApplication.firstName}</td>
                             <td>{courseApplication.lastName}</td>
                             <td>{courseApplication.createdAt ? new Date(courseApplication.createdAt).toLocaleDateString('de-DE') : '-'}</td>
-                            <td><Link to={`/`} className="btn btn-outline-info">Detail</Link></td>
+                            <td><Link to={`/admin/course-applications/detail/${courseApplication.id}`} className="btn btn-outline-info">Detail</Link></td>
                         </tr>
                     );
                 })}
