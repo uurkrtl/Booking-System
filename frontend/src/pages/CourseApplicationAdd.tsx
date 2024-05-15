@@ -19,7 +19,8 @@ function CourseApplicationAdd() {
         courseId: courseId,
         status: '',
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        course: {} as Course
     });
     const [course, setCourse] = useState<Course>();
     const [errorMessage, setErrorMessage] = useState<string>('');
