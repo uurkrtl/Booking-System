@@ -15,6 +15,7 @@ import de.bucheeinfach.backend.services.dtos.responses.CourseApplicationGetAllRe
 import de.bucheeinfach.backend.services.messages.CourseApplicationMessage;
 import de.bucheeinfach.backend.services.messages.CourseMessage;
 import de.bucheeinfach.backend.services.rules.CourseApplicationBusinessRule;
+import de.bucheeinfach.backend.services.rules.CourseBusinessRule;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +30,7 @@ public class CourseApplicationManager implements CourseApplicationService {
     private final IdService idService;
     private final ModelMapperService modelMapperService;
     private final CourseApplicationBusinessRule courseApplicationBusinessRule;
+    private final CourseBusinessRule courseBusinessRule;
 
     @Override
     public List<CourseApplicationGetAllResponse> getAllCourseApplications() {
@@ -63,5 +65,11 @@ public class CourseApplicationManager implements CourseApplicationService {
         courseApplication.setUpdatedAt(LocalDateTime.now());
         courseApplication = courseApplicationRepository.save(courseApplication);
         return modelMapperService.forResponse().map(courseApplication, CourseApplicationCreatedResponse.class);
+    }
+
+    @Override
+    public List<CourseApplicationGetAllResponse> getCourseApplicationsByCourseId(String courseId) {
+        courseBusinessRule.checkIfCourseByIdNotFound(courseId);
+        return courseApplicationRepository.findByCourseId(courseId).stream().map(courseApplication -> modelMapperService.forResponse().map(courseApplication, CourseApplicationGetAllResponse.class)).toList();
     }
 }

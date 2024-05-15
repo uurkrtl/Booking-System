@@ -1,9 +1,9 @@
-import CourseApplicationService from "../../services/CourseApplicationService.ts";
+import CourseApplicationService from "../services/CourseApplicationService.ts";
 import {useNavigate, useParams} from "react-router-dom";
 import React, {useEffect, useState} from "react";
-import {CourseApplication} from "../../types/CourseApplication.ts";
-import {Course} from "../../types/Course.ts";
-import CourseService from "../../services/CourseService.ts";
+import {CourseApplication} from "../types/CourseApplication.ts";
+import {Course} from "../types/Course.ts";
+import CourseService from "../services/CourseService.ts";
 
 const courseApplicationService = new CourseApplicationService();
 const courseService = new CourseService();

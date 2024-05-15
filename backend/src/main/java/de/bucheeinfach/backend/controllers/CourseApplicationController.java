@@ -36,4 +36,9 @@ public class CourseApplicationController {
     public CourseApplicationCreatedResponse changeCourseApplicationStatus(@PathVariable String id, @RequestParam String status) {
         return courseApplicationService.changeCourseApplicationStatus(id, status);
     }
+
+    @GetMapping("/course/{id}")
+    public List<CourseApplicationGetAllResponse> getCourseApplicationsByCourseId(@PathVariable String id) {
+        return courseApplicationService.getCourseApplicationsByCourseId(id);
+    }
 }

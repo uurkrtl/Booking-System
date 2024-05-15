@@ -12,6 +12,7 @@ import de.bucheeinfach.backend.services.dtos.requests.CourseApplicationRequest;
 import de.bucheeinfach.backend.services.dtos.responses.CourseApplicationCreatedResponse;
 import de.bucheeinfach.backend.services.dtos.responses.CourseApplicationGetAllResponse;
 import de.bucheeinfach.backend.services.rules.CourseApplicationBusinessRule;
+import de.bucheeinfach.backend.services.rules.CourseBusinessRule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -44,6 +45,10 @@ class CourseApplicationManagerTest {
     @Mock
     private CourseApplicationBusinessRule courseApplicationBusinessRule;
 
+    @SuppressWarnings("unused")
+    @Mock
+    private CourseBusinessRule courseBusinessRule;
+
     @Mock
     private IdService idService;
 
@@ -72,7 +77,7 @@ class CourseApplicationManagerTest {
     }
 
     @Test
-    void getCourseApplicationById_whenCourseExists_returnCourseApplication() {
+    void getCourseApplicationById_whenCourseApplicatonExists_returnCourseApplication() {
         // GIVEN
         CourseApplication courseApplication = CourseApplication.builder().id("1").build();
         CourseApplicationCreatedResponse expectedResponse = CourseApplicationCreatedResponse.builder().id("1").build();
@@ -142,4 +147,22 @@ class CourseApplicationManagerTest {
         assertEquals(expectedResponse.getStatus(), actualResponse.getStatus());
     }
 
+    @Test
+    void getCourseApplicationsByCourseId_whenCourseExists_returnListOfCourses() {
+        // GIVEN
+        List<CourseApplication> expectedResponse = List.of(
+                CourseApplication.builder().id("1").build(),
+                CourseApplication.builder().id("2").build()
+        );
+
+        // WHEN
+        when(modelMapperService.forResponse()).thenReturn(modelMapper);
+        when(courseApplicationRepository.findByCourseId("1")).thenReturn(expectedResponse);
+        when(courseRepository.existsById("1")).thenReturn(true);
+
+        List<CourseApplicationGetAllResponse> actualResponse = courseApplicationManager.getCourseApplicationsByCourseId("1");
+
+        // THEN
+        assertEquals(expectedResponse.size(), actualResponse.size());
+    }
 }

@@ -124,4 +124,18 @@ class CourseApplicationControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(newStatus));
     }
 
+    @Test
+    void getCourseApplicationsByCourseId_whenCourseExists_returnListOfCourses() throws Exception {
+        // GIVEN
+        String locationId = locationService.addLocation(LocationRequest.builder().name("Test Location").address("Test Address").build()).getId();
+        String programId = programService.addProgram(ProgramRequest.builder().name("Test Program").description("Test Description").build()).getId();
+        String courseId = courseService.addCourse(CourseRequest.builder().locationId(locationId).programId(programId).build()).getId();
+
+        // WHEN & THEN
+        mockMvc.perform(MockMvcRequestBuilders
+                        .get("/api/course-applications/course/" + courseId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
+    }
 }

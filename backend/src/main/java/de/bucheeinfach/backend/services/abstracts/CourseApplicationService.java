@@ -11,4 +11,5 @@ public interface CourseApplicationService {
     CourseApplicationCreatedResponse getCourseApplicationById(String id);
     CourseApplicationCreatedResponse addCourseApplication(CourseApplicationRequest courseApplicationRequest);
     CourseApplicationCreatedResponse changeCourseApplicationStatus(String id, String status);
+    List<CourseApplicationGetAllResponse> getCourseApplicationsByCourseId(String courseId);
 }

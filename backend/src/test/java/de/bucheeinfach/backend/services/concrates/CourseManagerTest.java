@@ -6,6 +6,7 @@ import de.bucheeinfach.backend.models.Course;
 import de.bucheeinfach.backend.models.CourseApplication;
 import de.bucheeinfach.backend.models.Location;
 import de.bucheeinfach.backend.models.Program;
+import de.bucheeinfach.backend.models.enums.CourseApplicationStatus;
 import de.bucheeinfach.backend.models.enums.CourseStatus;
 import de.bucheeinfach.backend.repositories.CourseApplicationRepository;
 import de.bucheeinfach.backend.repositories.CourseRepository;
@@ -25,6 +26,8 @@ import org.mockito.MockitoAnnotations;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Sort;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,19 +69,38 @@ class CourseManagerTest {
 
     @Test
     void getAllCourses_returnListOfCourses() {
-        // GIVEN
-        List<Course> expectedCourses = List.of(
-                Course.builder().build(),
-                Course.builder().build());
 
-        // WHEN
+        Course course1 = Course.builder().id("1").quota(10).build();
+        Course course2 = Course.builder().id("2").quota(20).build();
+        List<Course> courses = Arrays.asList(course1, course2);
+
+        when(courseRepository.findAll(Sort.by(Sort.Direction.ASC, "startDate"))).thenReturn(courses);
+
+        CourseGetAllResponse response1 = new CourseGetAllResponse();
+        response1.setId("1");
+        response1.setQuota(10);
+
+        CourseGetAllResponse response2 = new CourseGetAllResponse();
+        response2.setId("2");
+        response2.setQuota(20);
+
         when(modelMapperService.forResponse()).thenReturn(modelMapper);
-        when(courseRepository.findAll(Sort.by(Sort.Direction.ASC, "startDate"))).thenReturn(expectedCourses);
 
-        List<CourseGetAllResponse> actualResponse = courseManager.getAllCourses();
+        when(modelMapper.map(course1, CourseGetAllResponse.class)).thenReturn(response1);
+        when(modelMapper.map(course2, CourseGetAllResponse.class)).thenReturn(response2);
 
-        // THEN
-        assertEquals(expectedCourses.size(), actualResponse.size());
+        when(courseApplicationRepository.findByCourseId("1")).thenReturn(Collections.emptyList());
+        when(courseApplicationRepository.findByCourseId("2")).thenReturn(Collections.singletonList(CourseApplication.builder().status(CourseApplicationStatus.REGISTRATION_COMPLETE).build()));
+
+        List<CourseGetAllResponse> result = courseManager.getAllCourses();
+
+        assertEquals(2, result.size());
+        assertEquals(10, result.get(0).getFreeSpace());
+        assertEquals(19, result.get(1).getFreeSpace());
+
+        verify(courseRepository, times(1)).findAll(Sort.by(Sort.Direction.ASC, "startDate"));
+        verify(courseApplicationRepository, times(1)).findByCourseId("1");
+        verify(courseApplicationRepository, times(1)).findByCourseId("2");
 
     }
 
