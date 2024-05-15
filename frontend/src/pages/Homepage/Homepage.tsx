@@ -168,7 +168,7 @@ function Homepage() {
                                                                 className="btn btn-sm btn-outline-success">Anmeldung
                                                         </Link>
                                                     </div>
-                                                    <small className="text-body-secondary">Freie Plätze: {}</small>
+                                                    <small className="text-body-secondary">Freie Plätze: {course.freeSpace}</small>
                                                 </div>
                                             </div>
                                         </div>

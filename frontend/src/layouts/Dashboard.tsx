@@ -4,7 +4,7 @@ import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
 import CourseList from "../pages/CourseList.tsx";
 import CourseDetail from "../pages/CourseDetail.tsx";
-import CourseApplicationAdd from "../pages/Homepage/CourseApplicationAdd.tsx";
+import CourseApplicationAdd from "../pages/CourseApplicationAdd.tsx";
 import AdminCourseList from "../pages/admin-pages/AdminCourseList.tsx";
 
 

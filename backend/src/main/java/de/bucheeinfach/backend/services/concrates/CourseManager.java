@@ -41,7 +41,10 @@ public class CourseManager implements CourseService {
     @Override
     public List<CourseGetAllResponse> getAllCourses() {
         List<Course> courses = courseRepository.findAll(Sort.by(Sort.Direction.ASC, "startDate"));
-        return courses.stream().map(course -> modelMapperService.forResponse().map(course, CourseGetAllResponse.class)).toList();
+        List<CourseGetAllResponse> courseGetAllResponses = courses.stream().map(course -> modelMapperService.forResponse().map(course, CourseGetAllResponse.class)).toList();
+        courseGetAllResponses.forEach(course ->
+                course.setFreeSpace(course.getQuota()- (int)courseApplicationRepository.findByCourseId(course.getId()).stream().filter(participant -> participant.getStatus() == CourseApplicationStatus.REGISTRATION_COMPLETE).count()));
+        return courseGetAllResponses;
     }
 
     @Override
