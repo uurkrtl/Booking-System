@@ -8,6 +8,7 @@ import CourseApplicationAdd from "../pages/CourseApplicationAdd.tsx";
 import AdminCourseList from "../pages/admin-pages/AdminCourseList.tsx";
 import AdminCourseApplicationList from "../pages/admin-pages/AdminCourseApplicationList.tsx";
 import AdminCourseApplicationDetail from "../pages/admin-pages/AdminCourseApplicationDetail.tsx";
+import AdminProgramList from "../pages/admin-pages/AdminProgramList.tsx";
 
 
 function Dashboard() {
@@ -23,6 +24,7 @@ function Dashboard() {
                     <Route path={'/admin/courses'} element={<AdminCourseList/>}/>
                     <Route path={'/admin/course-applications/:courseId'} element={<AdminCourseApplicationList/>}/>
                     <Route path={'/admin/course-applications/detail/:courseApplicationId'} element={<AdminCourseApplicationDetail/>}/>
+                    <Route path={'/admin/program-list'} element={<AdminProgramList/>}/>
                 </Routes>
             </div>
             <Footer/>
