@@ -1,7 +1,8 @@
-import ProgramService from "../../services/ProgramService.ts";
+import ProgramService from "../../../services/ProgramService.ts";
 import {useEffect, useState} from "react";
-import {Program} from "../../types/Program.ts";
+import {Program} from "../../../types/Program.ts";
 import {Link} from "react-router-dom";
+import PageHeader from "../../../layouts/PageHeader.tsx";
 
 const programService = new ProgramService();
 
@@ -46,12 +47,10 @@ function AdminProgramList() {
 
     return (
         <div className={'container'}>
-            <div className="py-2 text-center">
-                <h2>Programmliste</h2>
-            </div>
+            <PageHeader title={'Programmliste'}/>
 
             <div className="d-flex justify-content-end">
-                <Link to={"/"} className="btn btn-outline-secondary mb-3">Programm erstellen</Link>
+                <Link to={"/admin/program/add"} className="btn btn-outline-secondary mb-3">Programm erstellen</Link>
             </div>
 
             <div className="input-group">

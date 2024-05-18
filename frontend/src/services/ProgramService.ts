@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {Program} from "../types/Program.ts";
 
 export default class ProgramService {
     getActiveProgramsSortedByNumberOfCourses() {
@@ -11,5 +12,9 @@ export default class ProgramService {
 
     getProgramById(id: string) {
         return axios.get(`/api/programs/${id}`)
+    }
+
+    addProgram(program: Program) {
+        return axios.post(`/api/programs`,program)
     }
 }
