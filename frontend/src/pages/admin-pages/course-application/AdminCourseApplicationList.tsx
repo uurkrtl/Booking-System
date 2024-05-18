@@ -1,6 +1,6 @@
-import CourseApplicationService from "../../services/CourseApplicationService.ts";
+import CourseApplicationService from "../../../services/CourseApplicationService.ts";
 import {useEffect, useState} from "react";
-import {CourseApplication} from "../../types/CourseApplication.ts";
+import {CourseApplication} from "../../../types/CourseApplication.ts";
 import {Link, useNavigate, useParams} from "react-router-dom";
 
 const courseApplicationService = new CourseApplicationService();

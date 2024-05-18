@@ -1,14 +1,15 @@
 import {Route, Routes} from "react-router-dom";
-import Homepage from "../pages/Homepage/Homepage.tsx";
+import Homepage from "../pages/homepage/Homepage.tsx";
 import Navbar from "./Navbar.tsx";
 import Footer from "./Footer.tsx";
 import CourseList from "../pages/CourseList.tsx";
 import CourseDetail from "../pages/CourseDetail.tsx";
 import CourseApplicationAdd from "../pages/CourseApplicationAdd.tsx";
 import AdminCourseList from "../pages/admin-pages/AdminCourseList.tsx";
-import AdminCourseApplicationList from "../pages/admin-pages/AdminCourseApplicationList.tsx";
-import AdminCourseApplicationDetail from "../pages/admin-pages/AdminCourseApplicationDetail.tsx";
-import AdminProgramList from "../pages/admin-pages/AdminProgramList.tsx";
+import AdminCourseApplicationList from "../pages/admin-pages/course-application/AdminCourseApplicationList.tsx";
+import AdminCourseApplicationDetail from "../pages/admin-pages/course-application/AdminCourseApplicationDetail.tsx";
+import AdminProgramList from "../pages/admin-pages/program/AdminProgramList.tsx";
+import AdminProgramAdd from "../pages/admin-pages/program/AdminProgramAdd.tsx";
 
 
 function Dashboard() {
@@ -25,6 +26,7 @@ function Dashboard() {
                     <Route path={'/admin/course-applications/:courseId'} element={<AdminCourseApplicationList/>}/>
                     <Route path={'/admin/course-applications/detail/:courseApplicationId'} element={<AdminCourseApplicationDetail/>}/>
                     <Route path={'/admin/program-list'} element={<AdminProgramList/>}/>
+                    <Route path={'/admin/program/add'} element={<AdminProgramAdd/>}/>
                 </Routes>
             </div>
             <Footer/>
