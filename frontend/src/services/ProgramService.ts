@@ -17,4 +17,8 @@ export default class ProgramService {
     addProgram(program: Program) {
         return axios.post(`/api/programs`,program)
     }
+
+    updateProgram(id: string, program: Program) {
+        return axios.put(`/api/programs/${id}`, program)
+    }
 }
