@@ -21,4 +21,8 @@ export default class ProgramService {
     updateProgram(id: string, program: Program) {
         return axios.put(`/api/programs/${id}`, program)
     }
+
+    changeProgramStatus(id:string, status: boolean) {
+        return axios.put(`/api/programs/status/${id}?status=${status}`)
+    }
 }
