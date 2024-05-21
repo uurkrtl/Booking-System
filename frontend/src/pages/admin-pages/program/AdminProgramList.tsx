@@ -82,7 +82,7 @@ function AdminProgramList() {
                                     <span className="badge text-bg-success rounded-pill">Aktiv</span>
                                     : <span className="badge text-bg-danger rounded-pill">Passiv</span>}
                             </td>
-                            <td><Link to={``}
+                            <td><Link to={`/admin/program/detail/${program.id}`}
                                       className="btn btn-outline-info">Detail</Link></td>
                         </tr>
                     );

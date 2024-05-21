@@ -12,6 +12,7 @@ import AdminProgramList from "../pages/admin-pages/program/AdminProgramList.tsx"
 import AdminProgramAdd from "../pages/admin-pages/program/AdminProgramAdd.tsx";
 import AdminProgramUpdate from "../pages/admin-pages/program/AdminProgramUpdate.tsx";
 import PageNotFound404 from "../pages/not-found-404/PageNotFound404.tsx";
+import AdminProgramDetail from "../pages/admin-pages/program/AdminProgramDetail.tsx";
 
 function Dashboard() {
     return (
@@ -29,6 +30,7 @@ function Dashboard() {
                     <Route path={'/admin/program-list'} element={<AdminProgramList/>}/>
                     <Route path={'/admin/program/add'} element={<AdminProgramAdd/>}/>
                     <Route path={'/admin/program/update/:programId'} element={<AdminProgramUpdate/>}/>
+                    <Route path={'/admin/program/detail/:programId'} element={<AdminProgramDetail/>}/>
                     <Route path={'*'} element={<PageNotFound404/>}/>
                 </Routes>
             </div>
